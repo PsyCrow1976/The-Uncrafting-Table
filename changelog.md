@@ -2,6 +2,12 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.4 — Item texture fix
+
+### Fixed
+
+- Inventory, JEI, hand-held, and recipe icon now show the vanilla crafting table texture (MC 26.1 uses `assets/<mod>/items/` instead of `models/item/`)
+
 ## 0.0.0.3 — Placeholder art and GUI shell
 
 ### Changed
