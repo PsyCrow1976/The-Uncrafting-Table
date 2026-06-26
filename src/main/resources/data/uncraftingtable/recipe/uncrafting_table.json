@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "PPP",
+    "PPP",
+    "PPP"
+  ],
+  "key": {
+    "P": "minecraft:oak_planks"
+  },
+  "result": {
+    "id": "uncraftingtable:uncrafting_table",
+    "count": 1
+  },
+  "neoforge:conditions": [
+    {
+      "type": "uncraftingtable:craftable"
+    }
+  ]
+}
