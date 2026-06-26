@@ -6,38 +6,29 @@ import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import org.jetbrains.annotations.Nullable;
 
 public class UncraftingTableMenu extends AbstractContainerMenu {
     public static final int INPUT_SLOT_INDEX = 0;
-    public static final int PREVIEW_SLOT_START = 1;
-    public static final int PLAYER_INVENTORY_START = 10;
+    public static final int PLAYER_INVENTORY_START = 1;
 
-    // Mirrored crafting table layout: input left, 3x3 preview right
-    private static final int INPUT_SLOT_X = 30;
-    private static final int INPUT_SLOT_Y = 35;
-    private static final int PREVIEW_GRID_X = 88;
-    private static final int PREVIEW_GRID_Y = 17;
+    private static final int INPUT_SLOT_X = 80;
+    private static final int INPUT_SLOT_Y = 20;
 
     private final UncraftingTableBlockEntity blockEntity;
     private final ContainerLevelAccess access;
-    private final ContainerData data;
 
     public UncraftingTableMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buffer) {
-        this(containerId, playerInventory, getBlockEntity(playerInventory, buffer), new SimpleContainerData(3));
+        this(containerId, playerInventory, getBlockEntity(playerInventory, buffer));
     }
 
-    public UncraftingTableMenu(int containerId, Inventory playerInventory, UncraftingTableBlockEntity blockEntity, ContainerData data) {
+    public UncraftingTableMenu(int containerId, Inventory playerInventory, UncraftingTableBlockEntity blockEntity) {
         super(ModMenus.UNCRAFTING_TABLE.get(), containerId);
         this.blockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
-        this.data = data;
 
         addSlot(new Slot(blockEntity, UncraftingTableBlockEntity.INPUT_SLOT, INPUT_SLOT_X, INPUT_SLOT_Y) {
             @Override
@@ -46,21 +37,7 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
             }
         });
 
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 3; column++) {
-                int slot = UncraftingTableBlockEntity.PREVIEW_START + row * 3 + column;
-                addSlot(new PreviewSlot(
-                        blockEntity,
-                        slot,
-                        PREVIEW_GRID_X + column * 18,
-                        PREVIEW_GRID_Y + row * 18));
-            }
-        }
-
-        addPlayerInventory(playerInventory);
-        addDataSlots(data);
-
-        // blockEntity.refreshRecipes(); // disabled — recipe preview not active yet
+        addStandardInventorySlots(playerInventory, 8, 51);
     }
 
     private static UncraftingTableBlockEntity getBlockEntity(Inventory playerInventory, RegistryFriendlyByteBuf buffer) {
@@ -71,32 +48,8 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
         throw new IllegalStateException("Uncrafting table block entity not found");
     }
 
-    private void addPlayerInventory(Inventory playerInventory) {
-        for (int row = 0; row < 3; row++) {
-            for (int column = 0; column < 9; column++) {
-                addSlot(new Slot(playerInventory, column + row * 9 + 9, 8 + column * 18, 84 + row * 18));
-            }
-        }
-
-        for (int column = 0; column < 9; column++) {
-            addSlot(new Slot(playerInventory, column, 8 + column * 18, 142));
-        }
-    }
-
     public UncraftingTableBlockEntity getBlockEntity() {
         return blockEntity;
-    }
-
-    public int getRecipeCount() {
-        return data.get(0);
-    }
-
-    public int getSelectedRecipeIndex() {
-        return data.get(1);
-    }
-
-    public boolean hasValidRecipe() {
-        return data.get(2) == 1;
     }
 
     @Override
@@ -112,11 +65,7 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
                 if (!moveItemStackTo(stackInSlot, PLAYER_INVENTORY_START, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (slotIndex >= PLAYER_INVENTORY_START) {
-                if (!moveItemStackTo(stackInSlot, INPUT_SLOT_INDEX, INPUT_SLOT_INDEX + 1, false)) {
-                    return ItemStack.EMPTY;
-                }
-            } else if (slotIndex >= PREVIEW_SLOT_START) {
+            } else if (!moveItemStackTo(stackInSlot, INPUT_SLOT_INDEX, INPUT_SLOT_INDEX + 1, false)) {
                 return ItemStack.EMPTY;
             }
 

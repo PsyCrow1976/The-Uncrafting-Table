@@ -14,7 +14,6 @@ import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
@@ -24,45 +23,13 @@ import org.jetbrains.annotations.Nullable;
 
 public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvider, Container {
     public static final int INPUT_SLOT = 0;
-    public static final int PREVIEW_START = 1;
-    public static final int SLOT_COUNT = 10;
+    public static final int SLOT_COUNT = 1;
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
-
-    // Recipe / uncraft logic disabled for now — kept for when functionality is re-enabled
-    // private final List<ResolvedRecipe> resolvedRecipes = new ArrayList<>();
-    // private int selectedRecipeIndex = 0;
-
-    private final ContainerData data = new ContainerData() {
-        @Override
-        public int get(int index) {
-            return 0;
-        }
-
-        @Override
-        public void set(int index, int value) {
-            // disabled
-        }
-
-        @Override
-        public int getCount() {
-            return 3;
-        }
-    };
 
     public UncraftingTableBlockEntity(BlockPos pos, BlockState state) {
         super(ModBlockEntities.UNCRAFTING_TABLE.get(), pos, state);
     }
-
-    public ContainerData getContainerData() {
-        return data;
-    }
-
-    /*
-    public void cycleRecipe() { ... }
-    public void refreshRecipes() { ... }
-    private void updatePreviewSlots() { ... }
-    */
 
     @Override
     public Component getDisplayName() {
@@ -72,7 +39,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     @Nullable
     @Override
     public AbstractContainerMenu createMenu(int containerId, Inventory playerInventory, Player player) {
-        return new UncraftingTableMenu(containerId, playerInventory, this, data);
+        return new UncraftingTableMenu(containerId, playerInventory, this);
     }
 
     @Override
@@ -92,9 +59,6 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
     @Override
     public ItemStack removeItem(int slot, int amount) {
-        if (slot != INPUT_SLOT) {
-            return ItemStack.EMPTY;
-        }
         ItemStack removed = ContainerHelper.removeItem(items, slot, amount);
         if (!removed.isEmpty()) {
             setChanged();
@@ -104,23 +68,13 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
     @Override
     public ItemStack removeItemNoUpdate(int slot) {
-        if (slot != INPUT_SLOT) {
-            return ItemStack.EMPTY;
-        }
         return ContainerHelper.takeItem(items, slot);
     }
 
     @Override
     public void setItem(int slot, ItemStack stack) {
-        if (slot == INPUT_SLOT) {
-            items.set(slot, stack.getCount() > 1 ? stack.copyWithCount(1) : stack);
-            setChanged();
-            return;
-        }
-
-        if (slot >= PREVIEW_START) {
-            items.set(slot, stack);
-        }
+        items.set(slot, stack.getCount() > 1 ? stack.copyWithCount(1) : stack);
+        setChanged();
     }
 
     @Override

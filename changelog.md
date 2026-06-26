@@ -2,6 +2,14 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.5 — Simple single-slot GUI
+
+### Changed
+
+- GUI reduced to one input slot (centre top) plus player inventory
+- Removed 3x3 preview grid, arrow, and cycle button
+- Uses vanilla hopper container background (no baked-in crafting grid)
+
 ## 0.0.0.4 — Item texture fix
 
 ### Fixed
