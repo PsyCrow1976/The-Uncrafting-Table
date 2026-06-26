@@ -2,6 +2,14 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.3 — Placeholder art and GUI shell
+
+### Changed
+
+- Block and item now use vanilla crafting table textures (JEI, inventory, and placed block)
+- GUI layout mirrored: single input slot on the left, arrow pointing right, 3x3 preview area on the right
+- Recipe lookup, preview fill, cycle button, and uncraft actions disabled for step-by-step development
+
 ## 0.0.0.2 — Crash fix
 
 ### Fixed

@@ -1,18 +1,13 @@
 package com.psycrow.uncraftingtable.blockentity;
 
 import com.psycrow.uncraftingtable.menu.UncraftingTableMenu;
-import com.psycrow.uncraftingtable.recipe.RecipeResolver;
-import com.psycrow.uncraftingtable.recipe.ResolvedRecipe;
 import com.psycrow.uncraftingtable.registry.ModBlockEntities;
-import java.util.ArrayList;
-import java.util.List;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Container;
 import net.minecraft.world.ContainerHelper;
 import net.minecraft.world.MenuProvider;
@@ -33,26 +28,20 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     public static final int SLOT_COUNT = 10;
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
-    private final List<ResolvedRecipe> resolvedRecipes = new ArrayList<>();
-    private int selectedRecipeIndex = 0;
+
+    // Recipe / uncraft logic disabled for now — kept for when functionality is re-enabled
+    // private final List<ResolvedRecipe> resolvedRecipes = new ArrayList<>();
+    // private int selectedRecipeIndex = 0;
 
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
-            return switch (index) {
-                case 0 -> resolvedRecipes.size();
-                case 1 -> selectedRecipeIndex;
-                case 2 -> hasSelectedRecipe() ? 1 : 0;
-                default -> 0;
-            };
+            return 0;
         }
 
         @Override
         public void set(int index, int value) {
-            if (index == 1 && !resolvedRecipes.isEmpty()) {
-                selectedRecipeIndex = Math.floorMod(value, resolvedRecipes.size());
-                updatePreviewSlots();
-            }
+            // disabled
         }
 
         @Override
@@ -69,64 +58,11 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
         return data;
     }
 
-    public List<ResolvedRecipe> getResolvedRecipes() {
-        return resolvedRecipes;
-    }
-
-    @Nullable
-    public ResolvedRecipe getSelectedRecipe() {
-        if (resolvedRecipes.isEmpty()) {
-            return null;
-        }
-        return resolvedRecipes.get(Math.min(selectedRecipeIndex, resolvedRecipes.size() - 1));
-    }
-
-    public boolean hasSelectedRecipe() {
-        return getSelectedRecipe() != null;
-    }
-
-    public void cycleRecipe() {
-        if (resolvedRecipes.size() <= 1) {
-            return;
-        }
-        selectedRecipeIndex = (selectedRecipeIndex + 1) % resolvedRecipes.size();
-        updatePreviewSlots();
-        setChanged();
-    }
-
-    public void refreshRecipes() {
-        if (!(level instanceof ServerLevel serverLevel)) {
-            return;
-        }
-
-        resolvedRecipes.clear();
-        selectedRecipeIndex = 0;
-
-        ItemStack input = getItem(INPUT_SLOT);
-        if (!input.isEmpty()) {
-            resolvedRecipes.addAll(RecipeResolver.resolve(serverLevel.recipeAccess(), serverLevel.registryAccess(), input));
-        }
-
-        updatePreviewSlots();
-        setChanged();
-    }
-
-    private void updatePreviewSlots() {
-        for (int slot = PREVIEW_START; slot < SLOT_COUNT; slot++) {
-            items.set(slot, ItemStack.EMPTY);
-        }
-
-        ResolvedRecipe selected = getSelectedRecipe();
-        if (selected == null) {
-            return;
-        }
-
-        ItemStack[] previewGrid = selected.previewGrid();
-        for (int index = 0; index < previewGrid.length; index++) {
-            ItemStack stack = previewGrid[index];
-            items.set(PREVIEW_START + index, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
-        }
-    }
+    /*
+    public void cycleRecipe() { ... }
+    public void refreshRecipes() { ... }
+    private void updatePreviewSlots() { ... }
+    */
 
     @Override
     public Component getDisplayName() {
@@ -161,7 +97,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
         }
         ItemStack removed = ContainerHelper.removeItem(items, slot, amount);
         if (!removed.isEmpty()) {
-            refreshRecipes();
+            setChanged();
         }
         return removed;
     }
@@ -178,7 +114,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     public void setItem(int slot, ItemStack stack) {
         if (slot == INPUT_SLOT) {
             items.set(slot, stack.getCount() > 1 ? stack.copyWithCount(1) : stack);
-            refreshRecipes();
+            setChanged();
             return;
         }
 
@@ -195,23 +131,18 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     @Override
     public void clearContent() {
         items.replaceAll(ignored -> ItemStack.EMPTY);
-        resolvedRecipes.clear();
-        selectedRecipeIndex = 0;
     }
 
     @Override
     protected void saveAdditional(ValueOutput output) {
         super.saveAdditional(output);
         ContainerHelper.saveAllItems(output, items);
-        output.putInt("SelectedRecipe", selectedRecipeIndex);
     }
 
     @Override
     protected void loadAdditional(ValueInput input) {
         super.loadAdditional(input);
         ContainerHelper.loadAllItems(input, items);
-        selectedRecipeIndex = input.getIntOr("SelectedRecipe", 0);
-        refreshRecipes();
     }
 
     @Override

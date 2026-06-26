@@ -19,6 +19,12 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
     public static final int PREVIEW_SLOT_START = 1;
     public static final int PLAYER_INVENTORY_START = 10;
 
+    // Mirrored crafting table layout: input left, 3x3 preview right
+    private static final int INPUT_SLOT_X = 30;
+    private static final int INPUT_SLOT_Y = 35;
+    private static final int PREVIEW_GRID_X = 88;
+    private static final int PREVIEW_GRID_Y = 17;
+
     private final UncraftingTableBlockEntity blockEntity;
     private final ContainerLevelAccess access;
     private final ContainerData data;
@@ -33,7 +39,7 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
         this.access = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
         this.data = data;
 
-        addSlot(new Slot(blockEntity, UncraftingTableBlockEntity.INPUT_SLOT, 30, 35) {
+        addSlot(new Slot(blockEntity, UncraftingTableBlockEntity.INPUT_SLOT, INPUT_SLOT_X, INPUT_SLOT_Y) {
             @Override
             public int getMaxStackSize() {
                 return 1;
@@ -43,13 +49,18 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
         for (int row = 0; row < 3; row++) {
             for (int column = 0; column < 3; column++) {
                 int slot = UncraftingTableBlockEntity.PREVIEW_START + row * 3 + column;
-                addSlot(new PreviewSlot(this, blockEntity, slot, 90 + column * 18, 17 + row * 18));
+                addSlot(new PreviewSlot(
+                        blockEntity,
+                        slot,
+                        PREVIEW_GRID_X + column * 18,
+                        PREVIEW_GRID_Y + row * 18));
             }
         }
 
         addPlayerInventory(playerInventory);
         addDataSlots(data);
-        blockEntity.refreshRecipes();
+
+        // blockEntity.refreshRecipes(); // disabled — recipe preview not active yet
     }
 
     private static UncraftingTableBlockEntity getBlockEntity(Inventory playerInventory, RegistryFriendlyByteBuf buffer) {
