@@ -2,6 +2,12 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.2 — Crash fix
+
+### Fixed
+
+- Game no longer crashes on startup with `Block id not set` / `Trying to access unbound value` — block registration now uses `registerBlock()` so Minecraft 26.1 assigns the block ID correctly
+
 ## 0.0.0.1 — Initial release
 
 First public release of The Uncrafting Table for Minecraft 26.1.2 / NeoForge 26.1.2.76.
