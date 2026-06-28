@@ -1,8 +1,10 @@
 package com.psycrow.uncraftingtable.client;
 
 import com.psycrow.uncraftingtable.UncraftingTableMod;
+import com.psycrow.uncraftingtable.config.ModConfig;
 import com.psycrow.uncraftingtable.menu.UncraftingTableMenu;
 import com.psycrow.uncraftingtable.network.CycleRecipePayload;
+import com.psycrow.uncraftingtable.util.UncraftingDebug;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.components.WidgetSprites;
@@ -27,6 +29,7 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
             Identifier.withDefaultNamespace("widget/page_forward_highlighted"));
 
     private ImageButton cycleButton;
+    private int lastLoggedRecipeCount = -1;
 
     public UncraftingTableScreen(UncraftingTableMenu menu, Inventory playerInventory, Component title) {
         super(menu, playerInventory, title, 176, 166);
@@ -68,9 +71,18 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
             return;
         }
 
-        boolean canCycle = this.menu.getRecipeCount() > 1;
+        int recipeCount = this.menu.getRecipeCount();
+        boolean canCycle = recipeCount > 1;
         this.cycleButton.visible = canCycle;
         this.cycleButton.active = canCycle;
+
+        if (ModConfig.DEBUG.get() && recipeCount != this.lastLoggedRecipeCount) {
+            this.lastLoggedRecipeCount = recipeCount;
+            UncraftingDebug.log(
+                    "cycle button: clientRecipeCount={} visible={}",
+                    recipeCount,
+                    canCycle);
+        }
     }
 
     @Override

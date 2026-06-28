@@ -2,6 +2,12 @@
 
 Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.2.3 — Fix cycle button client sync
+
+### Fixed
+
+- Cycle button now appears when multiple recipes match — `ContainerData` slot 0 (recipe count) is written on the client during menu sync (previously ignored in `set()`)
+
 ## 0.0.2.2 — Input slot recipe-count debug logging
 
 ### Changed

@@ -39,23 +39,27 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private final List<ResolvedRecipe> resolvedRecipes = new ArrayList<>();
     private int selectedRecipeIndex = 0;
+    private int syncedRecipeCount = 0;
+    private int syncedHasRecipe = 0;
 
     private final ContainerData data = new ContainerData() {
         @Override
         public int get(int index) {
             return switch (index) {
-                case 0 -> resolvedRecipes.size();
+                case 0 -> syncedRecipeCount;
                 case 1 -> selectedRecipeIndex;
-                case 2 -> hasSelectedRecipe() ? 1 : 0;
+                case 2 -> syncedHasRecipe;
                 default -> 0;
             };
         }
 
         @Override
         public void set(int index, int value) {
-            if (index == 1 && !resolvedRecipes.isEmpty()) {
-                selectedRecipeIndex = Math.floorMod(value, resolvedRecipes.size());
-                updatePreviewSlots();
+            switch (index) {
+                case 0 -> syncedRecipeCount = value;
+                case 1 -> selectedRecipeIndex = value;
+                case 2 -> syncedHasRecipe = value;
+                default -> {}
             }
         }
 
@@ -94,9 +98,14 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
             return;
         }
         selectedRecipeIndex = (selectedRecipeIndex + 1) % resolvedRecipes.size();
+        syncContainerData();
         updatePreviewSlots();
         setChanged();
         notifyOpenMenus();
+        UncraftingDebug.log(
+                "cycleRecipe: selectedIndex={} recipeCount={}",
+                selectedRecipeIndex,
+                resolvedRecipes.size());
     }
 
     public void refreshRecipes() {
@@ -139,9 +148,15 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
             }
         }
 
+        syncContainerData();
         updatePreviewSlots();
         setChanged();
         notifyOpenMenus();
+    }
+
+    private void syncContainerData() {
+        syncedRecipeCount = resolvedRecipes.size();
+        syncedHasRecipe = hasSelectedRecipe() ? 1 : 0;
     }
 
     private void notifyOpenMenus() {
@@ -268,6 +283,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
         items.replaceAll(ignored -> ItemStack.EMPTY);
         resolvedRecipes.clear();
         selectedRecipeIndex = 0;
+        syncContainerData();
     }
 
     @Override
