@@ -2,6 +2,13 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.10 — Recipe resolver crash fix
+
+### Fixed
+
+- Recipe lookup no longer crashes on mod crafting recipes (e.g. DankStorage `UpgradeRecipe`) that require a full crafting grid input
+- Only standard shaped/shapeless crafting table recipes (`NormalCraftingRecipe`) are considered for uncrafting
+
 ## 0.0.0.9 — Recipe preview sync
 
 ### Fixed

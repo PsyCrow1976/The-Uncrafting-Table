@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
 import net.minecraft.world.item.crafting.CraftingRecipe;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.NormalCraftingRecipe;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
@@ -29,13 +30,24 @@ public final class RecipeResolver {
         List<ResolvedRecipe> results = new ArrayList<>();
         for (RecipeHolder<CraftingRecipe> holder : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
             CraftingRecipe craftingRecipe = holder.value();
-            ItemStack result = craftingRecipe.assemble(CraftingInput.EMPTY);
+            // Skip mod recipes (e.g. DankStorage UpgradeRecipe) that crash on CraftingInput.EMPTY
+            if (!(craftingRecipe instanceof NormalCraftingRecipe normalRecipe)) {
+                continue;
+            }
+
+            ItemStack result;
+            try {
+                result = normalRecipe.assemble(CraftingInput.EMPTY);
+            } catch (RuntimeException ignored) {
+                continue;
+            }
+
             if (result.isEmpty() || !ItemStack.isSameItem(result, input)) {
                 continue;
             }
 
-            ItemStack[] previewGrid = toPreviewGrid(craftingRecipe);
-            List<ItemStack> outputs = collectOutputs(craftingRecipe);
+            ItemStack[] previewGrid = toPreviewGrid(normalRecipe);
+            List<ItemStack> outputs = collectOutputs(normalRecipe);
             if (outputs.isEmpty()) {
                 continue;
             }
@@ -46,7 +58,7 @@ public final class RecipeResolver {
         return results;
     }
 
-    private static ItemStack[] toPreviewGrid(CraftingRecipe recipe) {
+    private static ItemStack[] toPreviewGrid(NormalCraftingRecipe recipe) {
         ItemStack[] grid = new ItemStack[9];
         PlacementInfo placement = recipe.placementInfo();
 
@@ -71,7 +83,7 @@ public final class RecipeResolver {
         return grid;
     }
 
-    private static List<ItemStack> collectOutputs(CraftingRecipe recipe) {
+    private static List<ItemStack> collectOutputs(NormalCraftingRecipe recipe) {
         PlacementInfo placement = recipe.placementInfo();
         Map<Integer, ItemStack> merged = new LinkedHashMap<>();
 
