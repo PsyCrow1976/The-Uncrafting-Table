@@ -144,7 +144,9 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
         ItemStack[] previewGrid = selected.previewGrid();
         for (int index = 0; index < previewGrid.length; index++) {
             ItemStack stack = previewGrid[index];
-            items.set(PREVIEW_START + index, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+            items.set(
+                    PREVIEW_START + index,
+                    stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
         }
     }
 

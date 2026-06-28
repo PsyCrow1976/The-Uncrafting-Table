@@ -1,6 +1,7 @@
 package com.psycrow.uncraftingtable.recipe;
 
 import it.unimi.dsi.fastutil.ints.IntList;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -59,6 +60,7 @@ public final class RecipeResolver {
 
     private static ItemStack[] toPreviewGrid(NormalCraftingRecipe recipe) {
         ItemStack[] grid = new ItemStack[9];
+        Arrays.fill(grid, ItemStack.EMPTY);
         PlacementInfo placement = recipe.placementInfo();
         List<Ingredient> ingredients = placement.ingredients();
 

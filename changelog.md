@@ -2,6 +2,13 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.12 — Preview grid null fix
+
+### Fixed
+
+- Shaped recipe preview no longer crashes when empty grid cells are left unset (e.g. bookshelf, 2×2 plank recipes)
+- Preview slot update treats null stacks as empty
+
 ## 0.0.0.11 — Recipe resolver hardening
 
 ### Fixed
