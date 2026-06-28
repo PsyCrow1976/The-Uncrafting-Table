@@ -4,7 +4,7 @@ A NeoForge mod for **Minecraft 26.1.2** that adds a block to reverse crafting re
 
 Repository: [github.com/PsyCrow1976/The-Uncrafting-Table](https://github.com/PsyCrow1976/The-Uncrafting-Table)
 
-**Current version:** 0.0.0.8
+**Current version:** 0.0.0.11
 
 ## Requirements
 

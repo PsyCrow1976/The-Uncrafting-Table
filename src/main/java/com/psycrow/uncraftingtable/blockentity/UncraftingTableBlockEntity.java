@@ -106,8 +106,12 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
         ItemStack input = getItem(INPUT_SLOT);
         if (!input.isEmpty()) {
-            resolvedRecipes.addAll(
-                    RecipeResolver.resolve(serverLevel.recipeAccess(), serverLevel.registryAccess(), input));
+            try {
+                resolvedRecipes.addAll(
+                        RecipeResolver.resolve(serverLevel.recipeAccess(), serverLevel.registryAccess(), input));
+            } catch (RuntimeException ignored) {
+                // Leave preview empty if recipe lookup fails
+            }
         }
 
         updatePreviewSlots();

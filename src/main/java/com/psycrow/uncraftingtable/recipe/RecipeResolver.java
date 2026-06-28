@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
+import net.minecraft.world.item.crafting.ShapelessRecipe;
 
 public final class RecipeResolver {
     private RecipeResolver() {}
@@ -29,30 +30,28 @@ public final class RecipeResolver {
 
         List<ResolvedRecipe> results = new ArrayList<>();
         for (RecipeHolder<CraftingRecipe> holder : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
-            CraftingRecipe craftingRecipe = holder.value();
-            // Skip mod recipes (e.g. DankStorage UpgradeRecipe) that crash on CraftingInput.EMPTY
-            if (!(craftingRecipe instanceof NormalCraftingRecipe normalRecipe)) {
-                continue;
-            }
-
-            ItemStack result;
             try {
-                result = normalRecipe.assemble(CraftingInput.EMPTY);
+                CraftingRecipe craftingRecipe = holder.value();
+                if (!(craftingRecipe instanceof NormalCraftingRecipe normalRecipe)
+                        || !(craftingRecipe instanceof ShapedRecipe || craftingRecipe instanceof ShapelessRecipe)) {
+                    continue;
+                }
+
+                ItemStack result = normalRecipe.assemble(CraftingInput.EMPTY);
+                if (result.isEmpty() || !ItemStack.isSameItem(result, input)) {
+                    continue;
+                }
+
+                ItemStack[] previewGrid = toPreviewGrid(normalRecipe);
+                List<ItemStack> outputs = collectOutputs(normalRecipe);
+                if (outputs.isEmpty()) {
+                    continue;
+                }
+
+                results.add(new ResolvedRecipe(holder, previewGrid, outputs));
             } catch (RuntimeException ignored) {
-                continue;
+                // Skip malformed or mod recipes (e.g. DankStorage UpgradeRecipe) that require a full grid
             }
-
-            if (result.isEmpty() || !ItemStack.isSameItem(result, input)) {
-                continue;
-            }
-
-            ItemStack[] previewGrid = toPreviewGrid(normalRecipe);
-            List<ItemStack> outputs = collectOutputs(normalRecipe);
-            if (outputs.isEmpty()) {
-                continue;
-            }
-
-            results.add(new ResolvedRecipe(holder, previewGrid, outputs));
         }
 
         return results;
@@ -61,13 +60,14 @@ public final class RecipeResolver {
     private static ItemStack[] toPreviewGrid(NormalCraftingRecipe recipe) {
         ItemStack[] grid = new ItemStack[9];
         PlacementInfo placement = recipe.placementInfo();
+        List<Ingredient> ingredients = placement.ingredients();
 
         if (recipe instanceof ShapedRecipe shaped) {
             IntList slots = placement.slotsToIngredientIndex();
             for (int slot = 0; slot < slots.size() && slot < grid.length; slot++) {
                 int ingredientIndex = slots.getInt(slot);
-                if (ingredientIndex >= 0) {
-                    grid[slot] = representativeStack(placement.ingredients().get(ingredientIndex));
+                if (ingredientIndex >= 0 && ingredientIndex < ingredients.size()) {
+                    grid[slot] = representativeStack(ingredients.get(ingredientIndex));
                 }
             }
         } else {
@@ -85,17 +85,18 @@ public final class RecipeResolver {
 
     private static List<ItemStack> collectOutputs(NormalCraftingRecipe recipe) {
         PlacementInfo placement = recipe.placementInfo();
+        List<Ingredient> ingredients = placement.ingredients();
         Map<Integer, ItemStack> merged = new LinkedHashMap<>();
 
         if (recipe instanceof ShapedRecipe) {
             IntList slots = placement.slotsToIngredientIndex();
             for (int slot = 0; slot < slots.size(); slot++) {
                 int ingredientIndex = slots.getInt(slot);
-                if (ingredientIndex < 0) {
+                if (ingredientIndex < 0 || ingredientIndex >= ingredients.size()) {
                     continue;
                 }
 
-                ItemStack stack = representativeStack(placement.ingredients().get(ingredientIndex));
+                ItemStack stack = representativeStack(ingredients.get(ingredientIndex));
                 if (stack.isEmpty()) {
                     continue;
                 }

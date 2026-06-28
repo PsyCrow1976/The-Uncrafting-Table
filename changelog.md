@@ -2,6 +2,15 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.11 — Recipe resolver hardening
+
+### Fixed
+
+- Recipe lookup restricted to vanilla-shaped and shapeless crafting recipes only (excludes mod recipes like DankStorage `UpgradeRecipe`)
+- Each recipe is processed in isolation — a bad recipe no longer aborts the entire lookup
+- Ingredient index bounds checks prevent preview grid crashes on malformed placement data
+- Block entity recipe refresh is wrapped in try/catch so placing items in the input slot never crashes the GUI
+
 ## 0.0.0.10 — Recipe resolver crash fix
 
 ### Fixed
