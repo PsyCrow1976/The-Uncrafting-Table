@@ -4,6 +4,12 @@ Public release notes for **The Uncrafting Table**. Step-by-step development hist
 
 ---
 
+## 0.0.1.1 — Meaningful uncraft filter
+
+### Fixed
+
+- Items that are only recipe ingredients (or resolve back to themselves) no longer show a bogus uncraft preview — e.g. coal block no longer appears to uncraft into coal block
+
 ## 0.0.1 — First public release
 
 **Minecraft 26.1.2** · **NeoForge 26.1.2.76**

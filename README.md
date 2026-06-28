@@ -10,7 +10,7 @@ The block and GUI use a **reversed crafting-table** look: a raised 3×3 grid wit
 
 Repository: [github.com/PsyCrow1976/The-Uncrafting-Table](https://github.com/PsyCrow1976/The-Uncrafting-Table)
 
-**Current version:** 0.0.1
+**Current version:** 0.0.1.1
 
 ## Visuals
 
@@ -101,7 +101,7 @@ testModeOnlyBookshelf = false
 ## Installation (players)
 
 1. Install NeoForge **26.1.2.76** for Minecraft **26.1.2**.
-2. Download `uncraftingtable-0.0.1.jar` from [Releases](https://github.com/PsyCrow1976/The-Uncrafting-Table/releases) or build it yourself (below).
+2. Download `uncraftingtable-0.0.1.1.jar` from [Releases](https://github.com/PsyCrow1976/The-Uncrafting-Table/releases) or build it yourself (below).
 3. Copy the JAR into your instance `mods/` folder (remove any older `uncraftingtable-*.jar` versions).
 4. Launch the game.
 
@@ -118,7 +118,7 @@ cd The-Uncrafting-Table
 The mod JAR is produced at:
 
 ```
-build/libs/uncraftingtable-0.0.1.jar
+build/libs/uncraftingtable-0.0.1.1.jar
 ```
 
 ### Dev client
