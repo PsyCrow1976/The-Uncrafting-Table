@@ -126,7 +126,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
         for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
             if (player.containerMenu instanceof UncraftingTableMenu menu && menu.getBlockEntity() == this) {
-                menu.broadcastChanges();
+                menu.broadcastFullState();
             }
         }
     }
@@ -203,7 +203,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     @Override
     public void setItem(int slot, ItemStack stack) {
         if (slot == INPUT_SLOT) {
-            items.set(slot, stack.getCount() > 1 ? stack.copyWithCount(1) : stack);
+            items.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
             refreshRecipes();
             setChanged();
         }

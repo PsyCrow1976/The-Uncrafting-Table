@@ -2,6 +2,15 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.13 — Recipe preview resolution fix
+
+### Fixed
+
+- Recipe lookup now uses crafting recipe displays (same system as JEI/crafting book) to match outputs and resolve tag ingredients like `#minecraft:planks`
+- Shaped recipes render in the 3x3 preview using correct pattern width and row layout
+- Input slot always stores a copy of the inserted item, avoiding shared stack references
+- Open menus receive a full container sync after preview updates
+
 ## 0.0.0.12 — Preview grid null fix
 
 ### Fixed
