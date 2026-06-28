@@ -74,6 +74,13 @@ public final class RecipeResolver {
                 }
 
                 if (resolved != null) {
+                    if (!isMeaningfulUncraft(resolved, input)) {
+                        UncraftingDebug.log(
+                                "resolve: skipped recipe={} via={} reason=not a meaningful uncraft (outputs or ingredients match input)",
+                                holder.id().identifier(),
+                                source);
+                        continue;
+                    }
                     results.add(resolved);
                     UncraftingDebug.log(
                             "resolve: matched recipe={} via={} outputCount={}",
@@ -206,6 +213,36 @@ public final class RecipeResolver {
 
     private static boolean matchesInput(ItemStack result, ItemStack input) {
         return !result.isEmpty() && ItemStack.isSameItem(result, input);
+    }
+
+    /**
+     * Reject recipes that would return the same item (e.g. input is only an ingredient display
+     * resolved back to itself). Uncrafting requires recovering different ingredients than the input.
+     */
+    private static boolean isMeaningfulUncraft(ResolvedRecipe resolved, ItemStack input) {
+        List<ItemStack> outputs = resolved.outputs();
+        if (outputs.isEmpty()) {
+            return false;
+        }
+
+        boolean hasDifferentOutput = false;
+        for (ItemStack output : outputs) {
+            if (!output.isEmpty() && !ItemStack.isSameItem(output, input)) {
+                hasDifferentOutput = true;
+                break;
+            }
+        }
+        if (!hasDifferentOutput) {
+            return false;
+        }
+
+        for (ItemStack stack : resolved.previewGrid()) {
+            if (stack != null && !stack.isEmpty() && !ItemStack.isSameItem(stack, input)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     private static ItemStack[] previewFromShapedDisplay(ShapedCraftingRecipeDisplay display, ContextMap context) {
