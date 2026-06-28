@@ -2,6 +2,12 @@
 
 Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.2.4 — Cycle button position
+
+### Changed
+
+- Moved the recipe cycle button ~25px to the right of the preview grid corner
+
 ## 0.0.2.3 — Fix cycle button client sync
 
 ### Fixed

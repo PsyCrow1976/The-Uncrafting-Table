@@ -23,6 +23,7 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
     private static final int PREVIEW_GRID_Y = 17;
     private static final int PREVIEW_GRID_SIZE = 54;
     private static final int CYCLE_BUTTON_SIZE = 12;
+    private static final int CYCLE_BUTTON_OFFSET_X = 25;
 
     private static final WidgetSprites CYCLE_SPRITES = new WidgetSprites(
             Identifier.withDefaultNamespace("widget/page_forward"),
@@ -39,7 +40,7 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
     @Override
     protected void init() {
         super.init();
-        int x = this.leftPos + PREVIEW_GRID_X + PREVIEW_GRID_SIZE - CYCLE_BUTTON_SIZE;
+        int x = this.leftPos + PREVIEW_GRID_X + PREVIEW_GRID_SIZE - CYCLE_BUTTON_SIZE + CYCLE_BUTTON_OFFSET_X;
         int y = this.topPos + PREVIEW_GRID_Y;
         this.cycleButton = new ImageButton(
                 x,
