@@ -1,5 +1,6 @@
 package com.psycrow.uncraftingtable.config;
 
+import java.util.Collections;
 import java.util.List;
 import net.minecraft.resources.Identifier;
 import net.neoforged.neoforge.common.ModConfigSpec;
@@ -34,22 +35,28 @@ public final class ModConfig {
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLOCKED_INPUT_ITEMS = BUILDER
             .comment("Item IDs that cannot be placed in the input slot (e.g. minecraft:oak_sapling).")
-            .defineList(
-                    "general.blockedInputItems",
-                    List.of("minecraft:oak_sapling"),
-                    ModConfig::isValidItemId);
+            .defineList("general.blockedInputItems", Collections.emptyList(), ModConfig::isValidItemId);
 
     public static final ModConfigSpec.BooleanValue BLOCK_DAMAGED_TOOLS_AND_WEAPONS = BUILDER
             .comment("When true, tools and weapons with any durability loss cannot be placed in the input slot.")
             .define("general.blockDamagedToolsAndWeapons", true);
 
-    public static final ModConfigSpec.BooleanValue DEBUG = BUILDER
-            .comment("Write detailed recipe lookup and input-slot logs to latest.log.")
-            .define("general.debug", true);
+    public static final ModConfigSpec.BooleanValue DEBUG;
+    public static final ModConfigSpec.BooleanValue TEST_MODE_ONLY_BOOKSHELF;
 
-    public static final ModConfigSpec.BooleanValue TEST_MODE_ONLY_BOOKSHELF = BUILDER
-            .comment("When true, only minecraft:bookshelf can be placed in the input slot (troubleshooting).")
-            .define("general.testModeOnlyBookshelf", false);
+    static {
+        BUILDER.push("Debugging");
+
+        DEBUG = BUILDER
+                .comment("Write detailed recipe lookup and input-slot logs to latest.log.")
+                .define("debug", true);
+
+        TEST_MODE_ONLY_BOOKSHELF = BUILDER
+                .comment("When true, only minecraft:bookshelf can be placed in the input slot (troubleshooting).")
+                .define("testModeOnlyBookshelf", false);
+
+        BUILDER.pop();
+    }
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 

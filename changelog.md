@@ -2,6 +2,13 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.21 — Config layout
+
+### Changed
+
+- `debug` and `testModeOnlyBookshelf` moved to a `[Debugging]` config section
+- `general.blockedInputItems` defaults to an empty list (no blocked items by default)
+
 ## 0.0.0.20 — Default crafting recipe update
 
 ### Changed
