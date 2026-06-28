@@ -38,7 +38,7 @@ The uncrafting screen keeps vanilla slot positions (input on the left, 3×3 reci
 
 <p align="center"><em>GUI texture (176×166 active area)</em></p>
 
-CurseForge listing artwork and a screenshot template live under [`branding/`](branding/).
+CurseForge listing artwork, description text, and a screenshot template live under [`branding/`](branding/) (`curseforge_description.html` / `.md`).
 
 ## Requirements
 

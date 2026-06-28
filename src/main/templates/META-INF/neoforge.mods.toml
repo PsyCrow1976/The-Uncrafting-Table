@@ -27,7 +27,7 @@ displayName="${mod_name}" #mandatory
 #updateJSONURL="https://change.me.example.invalid/updates.json" #optional
 
 # A URL for the "homepage" for this mod, displayed in the mod UI
-#displayURL="https://change.me.to.your.mods.homepage.example.invalid/" #optional
+displayURL="https://github.com/PsyCrow1976/The-Uncrafting-Table" #optional
 
 # A file name (in the root of the mod JAR) containing a logo for display
 #logoFile="examplemod.png" #optional
@@ -40,7 +40,10 @@ displayName="${mod_name}" #mandatory
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Adds an Uncrafting Table that reverses crafting recipes into their ingredients.
+Turn crafted items back into their original ingredients.
+
+Be aware: created 100% by Grok Composer 2.5 fast.
+https://github.com/PsyCrow1976/The-Uncrafting-Table
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.

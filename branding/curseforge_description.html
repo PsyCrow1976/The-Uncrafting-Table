@@ -1,0 +1,44 @@
+<h2>The Uncrafting Table</h2>
+<p>Turn crafted items back into their original ingredients with a dedicated <strong>Uncrafting Table</strong> block.</p>
+<blockquote><p><strong>Be aware:</strong> This mod was created <strong>100% by Grok Composer 2.5 fast</strong> (AI-assisted development).</p></blockquote>
+<p><strong>Source code:</strong> <a href="https://github.com/PsyCrow1976/The-Uncrafting-Table" rel="nofollow">github.com/PsyCrow1976/The-Uncrafting-Table</a></p>
+<hr />
+<h3>Overview</h3>
+<p>The Uncrafting Table reverses <strong>crafting table</strong> recipes. Insert a crafted item, preview the matched recipe in a live 3×3 grid, and click any preview slot to recover all ingredients at once.</p>
+<p>Custom block textures and GUI use a <strong>reversed crafting-table</strong> look: raised grid ridges, hollow center, outward arrows, and subtle cyan/purple accents.</p>
+<h3>How it works</h3>
+<ol>
+<li>Craft or find an <strong>Uncrafting Table</strong> (default recipe: oak planks, obsidian, and diamond — configurable).</li>
+<li>Place the block and open the GUI.</li>
+<li>Insert <strong>one item</strong> into the input slot on the left.</li>
+<li>View the matched recipe ingredients in the <strong>3×3 preview</strong> on the right.</li>
+<li><strong>Click any preview slot</strong> to uncraft — the input is consumed and ingredients go to your inventory.</li>
+<li><strong>Close the GUI</strong> — any item still in the input slot is returned to you.</li>
+</ol>
+<p>Uncraft is cancelled if your inventory cannot hold every ingredient. The input is never partially consumed.</p>
+<h3>Features</h3>
+<ul>
+<li>Single-item input with live recipe preview</li>
+<li>One-click uncraft to inventory</li>
+<li>Input returned on close</li>
+<li>Shaped and shapeless crafting recipes (tag-aware, e.g. <code>#minecraft:planks</code>)</li>
+<li>Configurable crafting recipe, input blocklist, and damaged-tool blocking</li>
+<li>Custom block textures and oak-toned GUI</li>
+</ul>
+<h3>Requirements</h3>
+<ul>
+<li><strong>Minecraft:</strong> 26.1.2</li>
+<li><strong>NeoForge:</strong> 26.1.2.76</li>
+</ul>
+<h3>Configuration</h3>
+<p>Edit <code>config/uncraftingtable-common.toml</code> after first launch. Key options include <code>general.craftable</code>, <code>general.customCraftingPattern</code>, <code>general.blockedInputItems</code>, and <code>general.blockDamagedToolsAndWeapons</code>.</p>
+<h3>Known limitations</h3>
+<ul>
+<li>Only <strong>crafting table</strong> recipes (not smelting, stonecutting, smithing, etc.)</li>
+<li>When multiple recipes match, the <strong>first</strong> is shown</li>
+<li>Shapeless recipes with more than 9 ingredients show only the first 9 in preview</li>
+</ul>
+<h3>Links</h3>
+<ul>
+<li><strong>GitHub:</strong> <a href="https://github.com/PsyCrow1976/The-Uncrafting-Table" rel="nofollow">The-Uncrafting-Table</a></li>
+</ul>
