@@ -16,6 +16,11 @@ All notable changes to The Uncrafting Table are documented here.
 - Block and item models now reference mod textures instead of vanilla crafting table
 - GUI reskinned with oak wood tones and uncrafting accent colors (slot layout unchanged)
 
+### Documentation
+
+- README updated with embedded previews of the mod logo, block textures, and GUI art
+- README visual section links to `branding/` assets for CurseForge listing artwork
+
 ## 0.0.0.21 — Config layout
 
 ### Changed

@@ -1,10 +1,44 @@
 # The Uncrafting Table
 
+<p align="center">
+  <img src="branding/curseforge_logo_256x256.png" width="160" alt="The Uncrafting Table mod logo" />
+</p>
+
 A NeoForge mod for **Minecraft 26.1.2** that adds a block to reverse crafting recipes — turn crafted items back into their original ingredients.
+
+The block and GUI use a **reversed crafting-table** look: a raised 3×3 grid with a hollow center, outward arrows, and subtle cyan/purple accents on the grid lines.
 
 Repository: [github.com/PsyCrow1976/The-Uncrafting-Table](https://github.com/PsyCrow1976/The-Uncrafting-Table)
 
 **Current version:** 0.0.0.22
+
+## Visuals
+
+### Block textures
+
+Custom 16×16 block faces (shown below at 8× scale). The top face inverts the vanilla crafting table: recessed slots become raised ridges, the center is hollow, and arrows point outward.
+
+<p align="center">
+  <img src="src/main/resources/assets/uncraftingtable/textures/block/uncrafting_table_top.png" width="128" alt="Uncrafting Table — top face" />
+  &nbsp;
+  <img src="src/main/resources/assets/uncraftingtable/textures/block/uncrafting_table_side.png" width="128" alt="Uncrafting Table — side face" />
+  &nbsp;
+  <img src="src/main/resources/assets/uncraftingtable/textures/block/uncrafting_table_front.png" width="128" alt="Uncrafting Table — front face" />
+</p>
+
+<p align="center"><em>Top · Side · Front</em></p>
+
+### GUI
+
+The uncrafting screen keeps vanilla slot positions (input on the left, 3×3 recipe preview on the right) with an oak-toned frame and accent highlights on the preview grid.
+
+<p align="center">
+  <img src="src/main/resources/assets/uncraftingtable/textures/gui/uncrafting_table.png" width="352" alt="Uncrafting Table GUI texture" />
+</p>
+
+<p align="center"><em>GUI texture (176×166 active area)</em></p>
+
+CurseForge listing artwork and a screenshot template live under [`branding/`](branding/).
 
 ## Requirements
 
@@ -29,7 +63,7 @@ Uncraft is cancelled if your inventory cannot hold every ingredient; the input i
 
 ### GUI & visuals
 
-The interface uses a custom mod-owned GUI texture (`uncrafting_table.png`) with slot backgrounds baked in; menu slot positions align exactly with the texture (input at 30,35; preview 3×3 at 88,17). Block and item models use custom textures: raised 3×3 grid top with hollow center and outward arrows, side grid wrapping, and an inverted front motif, with subtle cyan/purple accents on grid lines.
+See [Visuals](#visuals) above for preview images. The interface uses a custom mod-owned GUI texture (`uncrafting_table.png`) with slot backgrounds baked in; menu slot positions align exactly with the texture (input at 30,35; preview 3×3 at 88,17). Block and item models use the custom textures shown in the README.
 
 Regenerate assets from vendored references:
 
