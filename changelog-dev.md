@@ -2,6 +2,13 @@
 
 Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.2.2 — Input slot recipe-count debug logging
+
+### Changed
+
+- When an item is placed in the input slot, `latest.log` now reports `recipeCount` and `cycleAvailable` plus each matched recipe id (requires `[Debugging] debug = true`)
+- Shipped `defaultconfigs/uncraftingtable-common.toml` with `debug = true`
+
 ## 0.0.2.1 — Recipe cycle button
 
 ### Added

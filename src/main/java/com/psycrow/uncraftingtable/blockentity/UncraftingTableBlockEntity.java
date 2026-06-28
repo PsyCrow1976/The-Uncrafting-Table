@@ -121,11 +121,24 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
                     UncraftingDebug.log("refreshRecipes: lookup failed reason={}", exception.toString());
                 }
             }
-        } else {
-            UncraftingDebug.log("refreshRecipes: no input item");
         }
 
-        UncraftingDebug.log("refreshRecipes: resolvedRecipeCount={}", resolvedRecipes.size());
+        if (input.isEmpty()) {
+            UncraftingDebug.log("input slot: empty — recipeCount=0 cycleAvailable=false");
+        } else {
+            UncraftingDebug.log(
+                    "input slot: item={} recipeCount={} cycleAvailable={}",
+                    BuiltInRegistries.ITEM.getKey(input.getItem()),
+                    resolvedRecipes.size(),
+                    resolvedRecipes.size() > 1);
+            for (int index = 0; index < resolvedRecipes.size(); index++) {
+                UncraftingDebug.log(
+                        "input slot: match[{}] recipe={}",
+                        index,
+                        resolvedRecipes.get(index).holder().id().identifier());
+            }
+        }
+
         updatePreviewSlots();
         setChanged();
         notifyOpenMenus();
@@ -228,6 +241,9 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
                 return;
             }
 
+            UncraftingDebug.log(
+                    "setItem: input slot changed item={}",
+                    stack.isEmpty() ? "empty" : BuiltInRegistries.ITEM.getKey(stack.getItem()));
             items.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
             refreshRecipes();
             setChanged();
