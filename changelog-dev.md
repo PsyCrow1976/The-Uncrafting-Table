@@ -1,6 +1,24 @@
 # Development Changelog
 
-Detailed version history from internal `0.0.0.x` development builds. For the public release notes, see [changelog.md](changelog.md).
+Detailed version history from internal `0.0.0.x` development builds and public `0.0.1.x` patch releases. For public `0.0.x` release notes, see [changelog.md](changelog.md).
+
+## 0.0.1.3 — Single-item product uncraft filter
+
+### Fixed
+
+- Corrected the uncraft filter direction: only recipes whose **output is a single item** can be reversed (e.g. coal block → 9 coal), while bulk-output recipes (e.g. 1 coal block → 9 coal) no longer match when holding a single coal
+
+## 0.0.1.2 — Single-ingredient uncraft filter
+
+### Fixed
+
+- Only crafting recipes that use a single item in one slot can be reversed — e.g. planks uncraft back to a log, but coal block (9 coal) and similar multi-item crafts are no longer listed
+
+## 0.0.1.1 — Meaningful uncraft filter
+
+### Fixed
+
+- Items that are only recipe ingredients (or resolve back to themselves) no longer show a bogus uncraft preview — e.g. coal block no longer appears to uncraft into coal block
 
 ## 0.0.0.22 — Custom block & GUI visuals
 
