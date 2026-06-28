@@ -67,7 +67,9 @@ When a **new version** needs to be uploaded to CurseForge, request a fresh **API
    - Endpoint: `POST https://minecraft.curseforge.com/api/projects/1590819/upload-file`
    - Auth header: `X-Api-Token: <token>`
    - Form fields: `metadata` (JSON) + `file` (the JAR)
-5. Update the live project description with `POST .../update-project` if listing copy changed
+   - **File changelog:** use the full cumulative public history from [`branding/curseforge_changelog.md`](branding/curseforge_changelog.md) (CurseForge only shows the latest file’s changelog — do not upload just the new version’s notes)
+5. Keep `branding/curseforge_changelog.md` in sync with [`changelog.md`](changelog.md) whenever a public `0.0.x` release ships
+6. Update the live project description with `POST .../update-project` if listing copy changed
 
 The author upload API token can upload files and update the project description, but **cannot list or delete** existing files — remove rejected/archived files manually in the [Authors Dashboard](https://authors.curseforge.com/#/projects/1590819/files).
 

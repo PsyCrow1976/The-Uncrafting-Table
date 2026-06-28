@@ -1,9 +1,3 @@
-# Changelog
-
-Public release notes for **The Uncrafting Table**. Patch-level build history (`0.0.0.x`, `0.0.1.x`, `0.0.2.x`) is in [changelog-dev.md](changelog-dev.md).
-
----
-
 ## 0.0.3 — Recipe cycling
 
 **Minecraft 26.1.2** · **NeoForge 26.1.2.76**
@@ -62,6 +56,5 @@ Edit `config/uncraftingtable-common.toml` after first launch:
 ### Known limitations
 
 - Only **crafting table** recipes are reversed (not smelting, stonecutting, smithing, etc.)
-- When multiple recipes produce the same item, use the **cycle button** to switch between matches (added in 0.0.3)
 - Shapeless recipes with more than 9 ingredients show only the first 9 in the preview grid
 - Mod-specific crafting recipes that need special grid handling are skipped for stability
