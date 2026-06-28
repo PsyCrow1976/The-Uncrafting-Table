@@ -2,6 +2,13 @@
 
 Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.2.6 — Cycle button fine-tuning
+
+### Changed
+
+- Cycle button moved 4px right (11px outside grid corner)
+- Arrow rotated 90° clockwise
+
 ## 0.0.2.5 — Cycle button arrow and position
 
 ### Changed
