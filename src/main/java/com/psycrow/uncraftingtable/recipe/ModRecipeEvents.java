@@ -27,8 +27,6 @@ public final class ModRecipeEvents {
 
     private static JsonObject buildCustomRecipeJson() {
         List<? extends String> patternRows = ModConfig.CUSTOM_CRAFTING_PATTERN.get();
-        String ingredient = ModConfig.CUSTOM_CRAFTING_INGREDIENT.get();
-        char symbol = detectPatternKey(patternRows);
 
         JsonObject json = new JsonObject();
         json.addProperty("type", "minecraft:crafting_shaped");
@@ -39,10 +37,7 @@ public final class ModRecipeEvents {
             pattern.add(row);
         }
         json.add("pattern", pattern);
-
-        JsonObject key = new JsonObject();
-        key.addProperty(String.valueOf(symbol), ingredient);
-        json.add("key", key);
+        json.add("key", buildRecipeKey());
 
         JsonObject result = new JsonObject();
         result.addProperty("id", UncraftingTableMod.MOD_ID + ":uncrafting_table");
@@ -52,16 +47,16 @@ public final class ModRecipeEvents {
         return json;
     }
 
-    private static char detectPatternKey(List<? extends String> patternRows) {
-        for (String row : patternRows) {
-            for (int index = 0; index < row.length(); index++) {
-                char symbol = row.charAt(index);
-                if (symbol != ' ') {
-                    return symbol;
-                }
+    private static JsonObject buildRecipeKey() {
+        JsonObject key = new JsonObject();
+
+        for (String entry : ModConfig.CUSTOM_CRAFTING_KEYS.get()) {
+            int separator = entry.indexOf('=');
+            if (separator == 1) {
+                key.addProperty(entry.substring(0, 1), entry.substring(separator + 1));
             }
         }
 
-        return 'P';
+        return key;
     }
 }

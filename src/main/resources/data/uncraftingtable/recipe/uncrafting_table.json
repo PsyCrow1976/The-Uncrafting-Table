@@ -2,12 +2,14 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "PPP",
-    "PPP",
-    "PPP"
+    "POP",
+    "ODO",
+    "POP"
   ],
   "key": {
-    "P": "minecraft:oak_planks"
+    "P": "minecraft:oak_planks",
+    "O": "minecraft:obsidian",
+    "D": "minecraft:diamond"
   },
   "result": {
     "id": "uncraftingtable:uncrafting_table",

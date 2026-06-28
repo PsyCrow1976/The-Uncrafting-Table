@@ -12,19 +12,25 @@ public final class ModConfig {
             .define("general.craftable", true);
 
     public static final ModConfigSpec.BooleanValue USE_CUSTOM_CRAFTING_RECIPE = BUILDER
-            .comment("When true, the crafting recipe is built from customCraftingPattern and customCraftingIngredient.")
+            .comment("When true, the crafting recipe is built from customCraftingPattern and customCraftingKeys.")
             .define("general.useCustomCraftingRecipe", true);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_CRAFTING_PATTERN = BUILDER
             .comment("Shaped crafting pattern rows (1-3 rows, 1-3 characters each). Use spaces for empty cells.")
             .defineList(
                     "general.customCraftingPattern",
-                    List.of("PPP", "PPP", "PPP"),
+                    List.of("POP", "ODO", "POP"),
                     ModConfig::isValidPatternRow);
 
-    public static final ModConfigSpec.ConfigValue<String> CUSTOM_CRAFTING_INGREDIENT = BUILDER
-            .comment("Ingredient for non-space pattern characters (item ID or tag prefixed with #, e.g. minecraft:oak_planks).")
-            .define("general.customCraftingIngredient", "minecraft:oak_planks", ModConfig::isValidIngredient);
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_CRAFTING_KEYS = BUILDER
+            .comment("Pattern key to ingredient mappings (e.g. P=minecraft:oak_planks). Item IDs or #tags.")
+            .defineList(
+                    "general.customCraftingKeys",
+                    List.of(
+                            "P=minecraft:oak_planks",
+                            "O=minecraft:obsidian",
+                            "D=minecraft:diamond"),
+                    ModConfig::isValidCraftingKeyEntry);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLOCKED_INPUT_ITEMS = BUILDER
             .comment("Item IDs that cannot be placed in the input slot (e.g. minecraft:oak_sapling).")
@@ -53,16 +59,25 @@ public final class ModConfig {
         return value instanceof String id && Identifier.tryParse(id) != null;
     }
 
-    private static boolean isValidIngredient(Object value) {
-        if (!(value instanceof String id)) {
-            return false;
-        }
-
+    private static boolean isValidIngredient(String id) {
         if (id.startsWith("#")) {
             return Identifier.tryParse(id.substring(1)) != null;
         }
 
         return Identifier.tryParse(id) != null;
+    }
+
+    private static boolean isValidCraftingKeyEntry(Object value) {
+        if (!(value instanceof String entry)) {
+            return false;
+        }
+
+        int separator = entry.indexOf('=');
+        if (separator != 1 || entry.charAt(0) == ' ') {
+            return false;
+        }
+
+        return isValidIngredient(entry.substring(separator + 1));
     }
 
     private static boolean isValidPatternRow(Object value) {

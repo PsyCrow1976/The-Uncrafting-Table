@@ -2,6 +2,13 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.20 — Default crafting recipe update
+
+### Changed
+
+- Default crafting recipe is now oak planks in corners, obsidian on sides, diamond in the center
+- `general.customCraftingKeys` replaces `general.customCraftingIngredient` for multi-ingredient patterns
+
 ## 0.0.0.19 — Custom crafting recipe config
 
 ### Added
