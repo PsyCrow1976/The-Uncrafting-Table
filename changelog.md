@@ -2,6 +2,17 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.14 — Debug logging and bookshelf test mode
+
+### Added
+
+- `general.debug` config option (default `true`) — writes recipe lookup and preview sync details to `latest.log`
+- `general.testModeOnlyBookshelf` config option (default `true`) — input slot accepts only `minecraft:bookshelf` while troubleshooting other mods
+
+### Changed
+
+- Rejected items are blocked in the input slot and logged when debug is enabled
+
 ## 0.0.0.13 — Recipe preview resolution fix
 
 ### Fixed

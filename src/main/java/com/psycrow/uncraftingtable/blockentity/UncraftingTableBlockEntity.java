@@ -4,6 +4,9 @@ import com.psycrow.uncraftingtable.menu.UncraftingTableMenu;
 import com.psycrow.uncraftingtable.recipe.RecipeResolver;
 import com.psycrow.uncraftingtable.recipe.ResolvedRecipe;
 import com.psycrow.uncraftingtable.registry.ModBlockEntities;
+import com.psycrow.uncraftingtable.util.InputRestrictions;
+import com.psycrow.uncraftingtable.util.UncraftingDebug;
+import net.minecraft.core.registries.BuiltInRegistries;
 import java.util.ArrayList;
 import java.util.List;
 import net.minecraft.core.BlockPos;
@@ -106,14 +109,23 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
         ItemStack input = getItem(INPUT_SLOT);
         if (!input.isEmpty()) {
-            try {
-                resolvedRecipes.addAll(
-                        RecipeResolver.resolve(serverLevel.recipeAccess(), serverLevel.registryAccess(), input));
-            } catch (RuntimeException ignored) {
-                // Leave preview empty if recipe lookup fails
+            if (!InputRestrictions.isAllowed(input)) {
+                UncraftingDebug.log(
+                        "refreshRecipes: rejected input={}",
+                        BuiltInRegistries.ITEM.getKey(input.getItem()));
+            } else {
+                try {
+                    resolvedRecipes.addAll(
+                            RecipeResolver.resolve(serverLevel.recipeAccess(), serverLevel.registryAccess(), input));
+                } catch (RuntimeException exception) {
+                    UncraftingDebug.log("refreshRecipes: lookup failed reason={}", exception.toString());
+                }
             }
+        } else {
+            UncraftingDebug.log("refreshRecipes: no input item");
         }
 
+        UncraftingDebug.log("refreshRecipes: resolvedRecipeCount={}", resolvedRecipes.size());
         updatePreviewSlots();
         setChanged();
         notifyOpenMenus();
@@ -138,16 +150,22 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
         ResolvedRecipe selected = getSelectedRecipe();
         if (selected == null) {
+            UncraftingDebug.log("updatePreviewSlots: no selected recipe, preview cleared");
             return;
         }
 
         ItemStack[] previewGrid = selected.previewGrid();
+        int filledSlots = 0;
         for (int index = 0; index < previewGrid.length; index++) {
             ItemStack stack = previewGrid[index];
-            items.set(
-                    PREVIEW_START + index,
-                    stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+            ItemStack previewStack = stack == null || stack.isEmpty() ? ItemStack.EMPTY : stack.copy();
+            items.set(PREVIEW_START + index, previewStack);
+            if (!previewStack.isEmpty()) {
+                filledSlots++;
+            }
         }
+
+        UncraftingDebug.log("updatePreviewSlots: filledPreviewSlots={}", filledSlots);
     }
 
     @Override
@@ -203,6 +221,13 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
     @Override
     public void setItem(int slot, ItemStack stack) {
         if (slot == INPUT_SLOT) {
+            if (!stack.isEmpty() && !InputRestrictions.isAllowed(stack)) {
+                UncraftingDebug.log(
+                        "setItem: rejected input={}",
+                        BuiltInRegistries.ITEM.getKey(stack.getItem()));
+                return;
+            }
+
             items.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
             refreshRecipes();
             setChanged();

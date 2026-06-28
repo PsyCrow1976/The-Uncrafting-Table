@@ -3,6 +3,7 @@ package com.psycrow.uncraftingtable.menu;
 import com.psycrow.uncraftingtable.blockentity.UncraftingTableBlockEntity;
 import com.psycrow.uncraftingtable.network.UncraftHandler;
 import com.psycrow.uncraftingtable.registry.ModMenus;
+import com.psycrow.uncraftingtable.util.InputRestrictions;
 import net.minecraft.network.RegistryFriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
@@ -52,6 +53,11 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
             @Override
             public int getMaxStackSize() {
                 return 1;
+            }
+
+            @Override
+            public boolean mayPlace(ItemStack stack) {
+                return InputRestrictions.isAllowed(stack);
             }
         });
 

@@ -1,11 +1,15 @@
 package com.psycrow.uncraftingtable.recipe;
 
+import com.psycrow.uncraftingtable.config.ModConfig;
+import com.psycrow.uncraftingtable.util.UncraftingDebug;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import net.minecraft.core.HolderLookup;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.Identifier;
 import net.minecraft.util.context.ContextMap;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CraftingInput;
@@ -27,35 +31,87 @@ public final class RecipeResolver {
 
     public static List<ResolvedRecipe> resolve(RecipeManager recipeManager, HolderLookup.Provider registries, ItemStack input) {
         if (input.isEmpty()) {
+            UncraftingDebug.log("resolve: input is empty, skipping lookup");
             return List.of();
         }
+
+        Identifier inputId = BuiltInRegistries.ITEM.getKey(input.getItem());
+        var craftingRecipes = recipeManager.recipeMap().byType(RecipeType.CRAFTING);
+        UncraftingDebug.log(
+                "resolve: input={} craftingRecipeCount={}",
+                inputId,
+                craftingRecipes.size());
 
         ContextMap context = new ContextMap.Builder()
                 .withParameter(SlotDisplayContext.REGISTRIES, registries)
                 .create(SlotDisplayContext.CONTEXT);
 
         List<ResolvedRecipe> results = new ArrayList<>();
-        for (RecipeHolder<CraftingRecipe> holder : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
+        int examined = 0;
+        int skippedType = 0;
+        int skippedPlacement = 0;
+        int skippedException = 0;
+
+        for (RecipeHolder<CraftingRecipe> holder : craftingRecipes) {
             try {
                 CraftingRecipe craftingRecipe = holder.value();
                 if (!(craftingRecipe instanceof NormalCraftingRecipe normalRecipe)) {
+                    skippedType++;
                     continue;
                 }
 
                 if (normalRecipe.placementInfo().isImpossibleToPlace()) {
+                    skippedPlacement++;
                     continue;
                 }
 
+                examined++;
                 ResolvedRecipe resolved = resolveFromDisplay(holder, normalRecipe, input, context);
+                String source = "display";
                 if (resolved == null) {
                     resolved = resolveFromPlacement(holder, normalRecipe, input, context);
+                    source = "placement";
                 }
 
                 if (resolved != null) {
                     results.add(resolved);
+                    UncraftingDebug.log(
+                            "resolve: matched recipe={} via={} outputCount={}",
+                            holder.id().identifier(),
+                            source,
+                            resolved.outputs().size());
                 }
-            } catch (RuntimeException ignored) {
-                // Skip malformed or mod recipes that cannot be reversed safely
+            } catch (RuntimeException exception) {
+                skippedException++;
+                if (ModConfig.DEBUG.get()) {
+                    UncraftingDebug.log(
+                            "resolve: skipped recipe={} reason={}",
+                            holder.id().identifier(),
+                            exception.toString());
+                }
+            }
+        }
+
+        UncraftingDebug.log(
+                "resolve: finished input={} matches={} examined={} skippedType={} skippedPlacement={} skippedException={}",
+                inputId,
+                results.size(),
+                examined,
+                skippedType,
+                skippedPlacement,
+                skippedException);
+
+        if (ModConfig.DEBUG.get() && !results.isEmpty()) {
+            ResolvedRecipe first = results.getFirst();
+            for (int slot = 0; slot < first.previewGrid().length; slot++) {
+                ItemStack stack = first.previewGrid()[slot];
+                if (stack != null && !stack.isEmpty()) {
+                    UncraftingDebug.log(
+                            "resolve: preview slot {} = {} x{}",
+                            slot,
+                            BuiltInRegistries.ITEM.getKey(stack.getItem()),
+                            stack.getCount());
+                }
             }
         }
 
@@ -71,20 +127,24 @@ public final class RecipeResolver {
             if (display instanceof ShapedCraftingRecipeDisplay shaped) {
                 ItemStack result = shaped.result().resolveForFirstStack(context);
                 if (matchesInput(result, input)) {
+                    logCandidate(holder, "shaped-display", result);
                     ItemStack[] previewGrid = previewFromShapedDisplay(shaped, context);
                     List<ItemStack> outputs = collectOutputs(previewGrid);
                     if (!outputs.isEmpty()) {
                         return new ResolvedRecipe(holder, previewGrid, outputs);
                     }
+                    logCandidateFailure(holder, "shaped-display", "preview outputs empty");
                 }
             } else if (display instanceof ShapelessCraftingRecipeDisplay shapeless) {
                 ItemStack result = shapeless.result().resolveForFirstStack(context);
                 if (matchesInput(result, input)) {
+                    logCandidate(holder, "shapeless-display", result);
                     ItemStack[] previewGrid = previewFromShapelessDisplay(shapeless, context);
                     List<ItemStack> outputs = collectOutputs(previewGrid);
                     if (!outputs.isEmpty()) {
                         return new ResolvedRecipe(holder, previewGrid, outputs);
                     }
+                    logCandidateFailure(holder, "shapeless-display", "preview outputs empty");
                 }
             }
         }
@@ -100,7 +160,8 @@ public final class RecipeResolver {
         ItemStack result;
         try {
             result = recipe.assemble(CraftingInput.EMPTY);
-        } catch (RuntimeException ignored) {
+        } catch (RuntimeException exception) {
+            logCandidateFailure(holder, "placement-assemble", exception.toString());
             return null;
         }
 
@@ -108,13 +169,39 @@ public final class RecipeResolver {
             return null;
         }
 
+        logCandidate(holder, "placement", result);
         ItemStack[] previewGrid = previewFromPlacement(recipe, context);
         List<ItemStack> outputs = collectOutputs(previewGrid);
         if (outputs.isEmpty()) {
+            logCandidateFailure(holder, "placement", "preview outputs empty");
             return null;
         }
 
         return new ResolvedRecipe(holder, previewGrid, outputs);
+    }
+
+    private static void logCandidate(RecipeHolder<CraftingRecipe> holder, String source, ItemStack result) {
+        if (!ModConfig.DEBUG.get()) {
+            return;
+        }
+
+        UncraftingDebug.log(
+                "resolve: candidate recipe={} source={} result={}",
+                holder.id().identifier(),
+                source,
+                BuiltInRegistries.ITEM.getKey(result.getItem()));
+    }
+
+    private static void logCandidateFailure(RecipeHolder<CraftingRecipe> holder, String source, String reason) {
+        if (!ModConfig.DEBUG.get()) {
+            return;
+        }
+
+        UncraftingDebug.log(
+                "resolve: candidate failed recipe={} source={} reason={}",
+                holder.id().identifier(),
+                source,
+                reason);
     }
 
     private static boolean matchesInput(ItemStack result, ItemStack input) {
