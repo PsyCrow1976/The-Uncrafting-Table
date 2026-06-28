@@ -4,6 +4,14 @@ Public release notes for **The Uncrafting Table**. Patch-level build history (`0
 
 ---
 
+## 0.0.3 — Recipe cycling
+
+**Minecraft 26.1.2** · **NeoForge 26.1.2.76**
+
+### Added
+
+- Recipe cycle button to switch between alternate uncrafting recipes when an item has multiple matches
+
 ## 0.0.2 — Anti-duplication recipe filtering
 
 **Minecraft 26.1.2** · **NeoForge 26.1.2.76**
