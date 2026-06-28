@@ -1,8 +1,8 @@
 # Development Changelog
 
-Detailed version history from internal `0.0.0.x` development builds and public `0.0.1.x` patch releases. For public `0.0.x` release notes, see [changelog.md](changelog.md).
+Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
-## 0.0.3 — Recipe cycle button
+## 0.0.2.1 — Recipe cycle button
 
 ### Added
 

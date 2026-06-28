@@ -1,6 +1,6 @@
 # Changelog
 
-Public release notes for **The Uncrafting Table**. Patch-level build history (`0.0.0.x` and `0.0.1.x`) is in [changelog-dev.md](changelog-dev.md).
+Public release notes for **The Uncrafting Table**. Patch-level build history (`0.0.0.x`, `0.0.1.x`, `0.0.2.x`) is in [changelog-dev.md](changelog-dev.md).
 
 ---
 
