@@ -4,6 +4,14 @@ Public release notes for **The Uncrafting Table**. Step-by-step development hist
 
 ---
 
+## 0.0.2 — Anti-duplication recipe filtering
+
+**Minecraft 26.1.2** · **NeoForge 26.1.2.76**
+
+### Fixed
+
+- Tightened which crafting recipes can be reversed to prevent item duplication — only crafts that produce a **single output item** are eligible (e.g. coal block → 9 coal), while bulk-output and ingredient-only matches are rejected (e.g. one coal can no longer become a coal block)
+
 ## 0.0.1.3 — Single-item product uncraft filter
 
 ### Fixed
