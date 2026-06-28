@@ -2,6 +2,12 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.16 — All items enabled
+
+### Changed
+
+- Bookshelf-only test mode disabled by default (`general.testModeOnlyBookshelf = false`) — all craftable items can be placed in the input slot again
+
 ## 0.0.0.15 — Client preview sync fix
 
 ### Fixed

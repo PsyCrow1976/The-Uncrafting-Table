@@ -15,7 +15,7 @@ public final class ModConfig {
 
     public static final ModConfigSpec.BooleanValue TEST_MODE_ONLY_BOOKSHELF = BUILDER
             .comment("When true, only minecraft:bookshelf can be placed in the input slot (troubleshooting).")
-            .define("general.testModeOnlyBookshelf", true);
+            .define("general.testModeOnlyBookshelf", false);
 
     public static final ModConfigSpec SPEC = BUILDER.build();
 
