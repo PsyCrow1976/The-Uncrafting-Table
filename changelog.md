@@ -2,6 +2,12 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.18 — Block damaged tools and weapons
+
+### Added
+
+- `general.blockDamagedToolsAndWeapons` (default `true`) — rejects pickaxes, axes, swords, bows, shields, and other tools/weapons that have lost any durability
+
 ## 0.0.0.17 — Config defaults and input blocklist
 
 ### Added

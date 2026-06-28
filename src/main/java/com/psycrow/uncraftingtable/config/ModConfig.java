@@ -18,6 +18,10 @@ public final class ModConfig {
                     List.of("minecraft:oak_sapling"),
                     ModConfig::isValidItemId);
 
+    public static final ModConfigSpec.BooleanValue BLOCK_DAMAGED_TOOLS_AND_WEAPONS = BUILDER
+            .comment("When true, tools and weapons with any durability loss cannot be placed in the input slot.")
+            .define("general.blockDamagedToolsAndWeapons", true);
+
     public static final ModConfigSpec.BooleanValue DEBUG = BUILDER
             .comment("Write detailed recipe lookup and input-slot logs to latest.log.")
             .define("general.debug", true);
