@@ -66,10 +66,11 @@ public final class RecipeResolver {
                 }
 
                 examined++;
-                ResolvedRecipe resolved = resolveFromDisplay(holder, normalRecipe, input, context);
+                ItemStack recipeResult = resolveRecipeResult(normalRecipe, context);
+                ResolvedRecipe resolved = resolveFromDisplay(holder, normalRecipe, recipeResult, input, context);
                 String source = "display";
                 if (resolved == null) {
-                    resolved = resolveFromPlacement(holder, normalRecipe, input, context);
+                    resolved = resolveFromPlacement(holder, normalRecipe, recipeResult, input, context);
                     source = "placement";
                 }
 
@@ -81,9 +82,9 @@ public final class RecipeResolver {
                                 source);
                         continue;
                     }
-                    if (!isSingleIngredientCraft(resolved)) {
+                    if (!isUncraftableProduct(recipeResult, input)) {
                         UncraftingDebug.log(
-                                "resolve: skipped recipe={} via={} reason=craft requires multiple ingredients",
+                                "resolve: skipped recipe={} via={} reason=input is not the crafted product for this recipe",
                                 holder.id().identifier(),
                                 source);
                         continue;
@@ -135,31 +136,30 @@ public final class RecipeResolver {
     private static ResolvedRecipe resolveFromDisplay(
             RecipeHolder<CraftingRecipe> holder,
             NormalCraftingRecipe recipe,
+            ItemStack recipeResult,
             ItemStack input,
             ContextMap context) {
+        if (!matchesInput(recipeResult, input)) {
+            return null;
+        }
+
         for (RecipeDisplay display : recipe.display()) {
             if (display instanceof ShapedCraftingRecipeDisplay shaped) {
-                ItemStack result = shaped.result().resolveForFirstStack(context);
-                if (matchesInput(result, input)) {
-                    logCandidate(holder, "shaped-display", result);
-                    ItemStack[] previewGrid = previewFromShapedDisplay(shaped, context);
-                    List<ItemStack> outputs = collectOutputs(previewGrid);
-                    if (!outputs.isEmpty()) {
-                        return new ResolvedRecipe(holder, previewGrid, outputs);
-                    }
-                    logCandidateFailure(holder, "shaped-display", "preview outputs empty");
+                logCandidate(holder, "shaped-display", recipeResult);
+                ItemStack[] previewGrid = previewFromShapedDisplay(shaped, context);
+                List<ItemStack> outputs = collectOutputs(previewGrid);
+                if (!outputs.isEmpty()) {
+                    return new ResolvedRecipe(holder, previewGrid, outputs);
                 }
+                logCandidateFailure(holder, "shaped-display", "preview outputs empty");
             } else if (display instanceof ShapelessCraftingRecipeDisplay shapeless) {
-                ItemStack result = shapeless.result().resolveForFirstStack(context);
-                if (matchesInput(result, input)) {
-                    logCandidate(holder, "shapeless-display", result);
-                    ItemStack[] previewGrid = previewFromShapelessDisplay(shapeless, context);
-                    List<ItemStack> outputs = collectOutputs(previewGrid);
-                    if (!outputs.isEmpty()) {
-                        return new ResolvedRecipe(holder, previewGrid, outputs);
-                    }
-                    logCandidateFailure(holder, "shapeless-display", "preview outputs empty");
+                logCandidate(holder, "shapeless-display", recipeResult);
+                ItemStack[] previewGrid = previewFromShapelessDisplay(shapeless, context);
+                List<ItemStack> outputs = collectOutputs(previewGrid);
+                if (!outputs.isEmpty()) {
+                    return new ResolvedRecipe(holder, previewGrid, outputs);
                 }
+                logCandidateFailure(holder, "shapeless-display", "preview outputs empty");
             }
         }
 
@@ -169,21 +169,14 @@ public final class RecipeResolver {
     private static ResolvedRecipe resolveFromPlacement(
             RecipeHolder<CraftingRecipe> holder,
             NormalCraftingRecipe recipe,
+            ItemStack recipeResult,
             ItemStack input,
             ContextMap context) {
-        ItemStack result;
-        try {
-            result = recipe.assemble(CraftingInput.EMPTY);
-        } catch (RuntimeException exception) {
-            logCandidateFailure(holder, "placement-assemble", exception.toString());
+        if (!matchesInput(recipeResult, input)) {
             return null;
         }
 
-        if (!matchesInput(result, input)) {
-            return null;
-        }
-
-        logCandidate(holder, "placement", result);
+        logCandidate(holder, "placement", recipeResult);
         ItemStack[] previewGrid = previewFromPlacement(recipe, context);
         List<ItemStack> outputs = collectOutputs(previewGrid);
         if (outputs.isEmpty()) {
@@ -218,8 +211,38 @@ public final class RecipeResolver {
                 reason);
     }
 
+    private static ItemStack resolveRecipeResult(NormalCraftingRecipe recipe, ContextMap context) {
+        for (RecipeDisplay display : recipe.display()) {
+            if (display instanceof ShapedCraftingRecipeDisplay shaped) {
+                return shaped.result().resolveForFirstStack(context);
+            }
+            if (display instanceof ShapelessCraftingRecipeDisplay shapeless) {
+                return shapeless.result().resolveForFirstStack(context);
+            }
+        }
+
+        try {
+            return recipe.assemble(CraftingInput.EMPTY);
+        } catch (RuntimeException ignored) {
+            return ItemStack.EMPTY;
+        }
+    }
+
     private static boolean matchesInput(ItemStack result, ItemStack input) {
         return !result.isEmpty() && ItemStack.isSameItem(result, input);
+    }
+
+    /**
+     * Only reverse crafts whose product is a single crafted item (e.g. 9 coal -> 1 coal block).
+     * Rejects bulk-output recipes (e.g. 1 coal block -> 9 coal) that would match a single
+     * ingredient via item type alone.
+     */
+    private static boolean isUncraftableProduct(ItemStack recipeResult, ItemStack input) {
+        if (recipeResult.getCount() != 1) {
+            return false;
+        }
+
+        return input.getCount() == 1;
     }
 
     /**
@@ -250,26 +273,6 @@ public final class RecipeResolver {
         }
 
         return false;
-    }
-
-    /**
-     * Only reverse crafts that used a single item in one slot (e.g. 1 log -> 4 planks).
-     * Multi-item crafts such as 9 coal -> 1 coal block are excluded.
-     */
-    private static boolean isSingleIngredientCraft(ResolvedRecipe resolved) {
-        int occupiedSlots = 0;
-        int totalCount = 0;
-
-        for (ItemStack stack : resolved.previewGrid()) {
-            if (stack == null || stack.isEmpty()) {
-                continue;
-            }
-
-            occupiedSlots++;
-            totalCount += stack.getCount();
-        }
-
-        return occupiedSlots == 1 && totalCount == 1;
     }
 
     private static ItemStack[] previewFromShapedDisplay(ShapedCraftingRecipeDisplay display, ContextMap context) {

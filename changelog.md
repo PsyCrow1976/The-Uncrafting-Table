@@ -4,6 +4,12 @@ Public release notes for **The Uncrafting Table**. Step-by-step development hist
 
 ---
 
+## 0.0.1.3 — Single-item product uncraft filter
+
+### Fixed
+
+- Corrected the uncraft filter direction: only recipes whose **output is a single item** can be reversed (e.g. coal block → 9 coal), while bulk-output recipes (e.g. 1 coal block → 9 coal) no longer match when holding a single coal
+
 ## 0.0.1.2 — Single-ingredient uncraft filter
 
 ### Fixed
