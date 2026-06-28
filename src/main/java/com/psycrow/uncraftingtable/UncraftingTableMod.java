@@ -6,6 +6,7 @@ import com.psycrow.uncraftingtable.config.ModConfig;
 import com.psycrow.uncraftingtable.network.ModNetworking;
 import com.psycrow.uncraftingtable.registry.ModBlockEntities;
 import com.psycrow.uncraftingtable.registry.ModBlocks;
+import com.psycrow.uncraftingtable.recipe.ModRecipeEvents;
 import com.psycrow.uncraftingtable.registry.ModMenus;
 import net.minecraft.resources.Identifier;
 import net.minecraft.world.item.CreativeModeTabs;
@@ -13,6 +14,7 @@ import net.neoforged.bus.api.IEventBus;
 import net.neoforged.fml.ModContainer;
 import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.config.ModConfig.Type;
+import net.neoforged.neoforge.common.NeoForge;
 import net.neoforged.neoforge.event.BuildCreativeModeTabContentsEvent;
 import net.neoforged.neoforge.registries.NeoForgeRegistries;
 import net.neoforged.neoforge.registries.RegisterEvent;
@@ -33,6 +35,8 @@ public class UncraftingTableMod {
         modEventBus.addListener(this::registerConditions);
 
         modContainer.registerConfig(Type.COMMON, ModConfig.SPEC);
+
+        NeoForge.EVENT_BUS.addListener(ModRecipeEvents::modifyRecipeJsons);
 
         modEventBus.addListener(this::addCreative);
     }

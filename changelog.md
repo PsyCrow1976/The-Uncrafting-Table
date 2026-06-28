@@ -2,6 +2,18 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.19 — Custom crafting recipe config
+
+### Added
+
+- `general.useCustomCraftingRecipe` — build the crafting recipe from config instead of the datapack default
+- `general.customCraftingPattern` — shaped pattern rows (default 3×3 `PPP`)
+- `general.customCraftingIngredient` — ingredient for pattern cells (default `minecraft:oak_planks`, supports `#` tags)
+
+### Changed
+
+- `general.craftable` now defaults to `true`
+
 ## 0.0.0.18 — Block damaged tools and weapons
 
 ### Added

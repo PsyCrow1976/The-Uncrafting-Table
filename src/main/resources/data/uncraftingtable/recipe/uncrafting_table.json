@@ -12,10 +12,5 @@
   "result": {
     "id": "uncraftingtable:uncrafting_table",
     "count": 1
-  },
-  "neoforge:conditions": [
-    {
-      "type": "uncraftingtable:craftable"
-    }
-  ]
+  }
 }
