@@ -10,7 +10,7 @@ The block and GUI use a **reversed crafting-table** look: a raised 3×3 grid wit
 
 Repository: [github.com/PsyCrow1976/The-Uncrafting-Table](https://github.com/PsyCrow1976/The-Uncrafting-Table)
 
-**Current version:** 0.0.0.22
+**Current version:** 0.0.1
 
 ## Visuals
 
@@ -52,7 +52,7 @@ See [requirements.md](requirements.md) for full details, core functionality, and
 
 ## How it works
 
-1. **Craft** an Uncrafting Table from 9 oak planks (3×3 grid), or find it in the Functional Blocks creative tab.
+1. **Craft** an Uncrafting Table using the configured recipe (default: oak planks, obsidian, and diamond), or find it in the Functional Blocks creative tab.
 2. **Place** the block and right-click to open the GUI.
 3. **Insert** a single item into the input slot on the left.
 4. **Preview** the matched crafting recipe — ingredients appear in the 3×3 grid on the right, with a decorative outward-arrow motif between input and preview.
@@ -101,7 +101,7 @@ testModeOnlyBookshelf = false
 ## Installation (players)
 
 1. Install NeoForge **26.1.2.76** for Minecraft **26.1.2**.
-2. Download `uncraftingtable-0.0.0.22.jar` from [Releases](https://github.com/PsyCrow1976/The-Uncrafting-Table/releases) or build it yourself (below).
+2. Download `uncraftingtable-0.0.1.jar` from [Releases](https://github.com/PsyCrow1976/The-Uncrafting-Table/releases) or build it yourself (below).
 3. Copy the JAR into your instance `mods/` folder (remove any older `uncraftingtable-*.jar` versions).
 4. Launch the game.
 
@@ -118,7 +118,7 @@ cd The-Uncrafting-Table
 The mod JAR is produced at:
 
 ```
-build/libs/uncraftingtable-0.0.0.22.jar
+build/libs/uncraftingtable-0.0.1.jar
 ```
 
 ### Dev client
@@ -154,7 +154,7 @@ src/main/resources/
 
 ## Changelog
 
-See [changelog.md](changelog.md).
+See [changelog.md](changelog.md). Development build history (`0.0.0.x`) is in [changelog-dev.md](changelog-dev.md).
 
 ## License
 
