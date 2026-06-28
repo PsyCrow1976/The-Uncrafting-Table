@@ -23,11 +23,11 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
     private static final int PREVIEW_GRID_Y = 17;
     private static final int PREVIEW_GRID_SIZE = 54;
     private static final int CYCLE_BUTTON_SIZE = 12;
-    private static final int CYCLE_BUTTON_OFFSET_X = 25;
+    private static final int CYCLE_BUTTON_OFFSET_X = 7;
 
     private static final WidgetSprites CYCLE_SPRITES = new WidgetSprites(
-            Identifier.withDefaultNamespace("widget/page_forward"),
-            Identifier.withDefaultNamespace("widget/page_forward_highlighted"));
+            Identifier.withDefaultNamespace("widget/page_backward"),
+            Identifier.withDefaultNamespace("widget/page_backward_highlighted"));
 
     private ImageButton cycleButton;
     private int lastLoggedRecipeCount = -1;

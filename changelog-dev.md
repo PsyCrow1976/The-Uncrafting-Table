@@ -2,6 +2,13 @@
 
 Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.2.5 — Cycle button arrow and position
+
+### Changed
+
+- Cycle button moved 18px left from 0.0.2.4 (7px outside grid corner)
+- Arrow flipped to point toward the preview grid (`page_backward` sprite)
+
 ## 0.0.2.4 — Cycle button position
 
 ### Changed
