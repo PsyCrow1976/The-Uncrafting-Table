@@ -2,6 +2,12 @@
 
 Detailed version history from internal `0.0.0.x` development builds and public `0.0.1.x` patch releases. For public `0.0.x` release notes, see [changelog.md](changelog.md).
 
+## 0.0.3 — Recipe cycle button
+
+### Added
+
+- Cycle button in the top-right corner of the preview grid when multiple crafting recipes match the input item; advances to the next recipe (no-op when only one match exists)
+
 ## 0.0.1.3 — Single-item product uncraft filter
 
 ### Fixed

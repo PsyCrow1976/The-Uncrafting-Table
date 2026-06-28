@@ -1,5 +1,6 @@
 {
   "block.uncraftingtable.uncrafting_table": "Uncrafting Table",
   "item.uncraftingtable.uncrafting_table": "Uncrafting Table",
-  "config.uncraftingtable.general.craftable": "Craftable"
+  "config.uncraftingtable.general.craftable": "Craftable",
+  "gui.uncraftingtable.cycle_recipe": "Next recipe"
 }
