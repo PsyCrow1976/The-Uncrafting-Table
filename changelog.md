@@ -2,6 +2,13 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.15 — Client preview sync fix
+
+### Fixed
+
+- Preview grid now appears in the GUI — `setItem` previously ignored preview slots 1–9, so client sync packets from the server were dropped
+- Menu sync uses `broadcastChanges` again so slot updates are sent to the client ( `broadcastFullState` does not sync item stacks)
+
 ## 0.0.0.14 — Debug logging and bookshelf test mode
 
 ### Added

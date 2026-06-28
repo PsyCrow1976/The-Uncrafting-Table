@@ -138,7 +138,7 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
         for (ServerPlayer player : serverLevel.getServer().getPlayerList().getPlayers()) {
             if (player.containerMenu instanceof UncraftingTableMenu menu && menu.getBlockEntity() == this) {
-                menu.broadcastFullState();
+                menu.broadcastChanges();
             }
         }
     }
@@ -230,6 +230,14 @@ public class UncraftingTableBlockEntity extends BlockEntity implements MenuProvi
 
             items.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copyWithCount(1));
             refreshRecipes();
+            setChanged();
+        } else if (slot >= PREVIEW_START && slot < SLOT_COUNT) {
+            // Preview slots are updated on the server in updatePreviewSlots; this path handles client sync packets.
+            items.set(slot, stack.isEmpty() ? ItemStack.EMPTY : stack.copy());
+            UncraftingDebug.log(
+                    "setItem: preview slot {} synced item={}",
+                    slot - PREVIEW_START,
+                    stack.isEmpty() ? "empty" : BuiltInRegistries.ITEM.getKey(stack.getItem()));
             setChanged();
         }
     }
