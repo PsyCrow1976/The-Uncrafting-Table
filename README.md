@@ -4,7 +4,7 @@ A NeoForge mod for **Minecraft 26.1.2** that adds a block to reverse crafting re
 
 Repository: [github.com/PsyCrow1976/The-Uncrafting-Table](https://github.com/PsyCrow1976/The-Uncrafting-Table)
 
-**Current version:** 0.0.0.16
+**Current version:** 0.0.0.17
 
 ## Requirements
 
@@ -43,10 +43,12 @@ After first launch, edit `config/uncraftingtable-common.toml`:
 
 ```toml
 [general]
-craftable = true   # set to false to remove the oak-plank crafting recipe
+craftable = false  # set to true to enable the 9-oak-plank crafting recipe
+blockedInputItems = ["minecraft:oak_sapling"]  # items that cannot be uncrafted via the input slot
+debug = true       # recipe lookup logs in latest.log
 ```
 
-Changes to `craftable` take effect after reloading recipes (`/reload`) or restarting the world.
+Changes to `craftable` take effect after reloading recipes (`/reload`) or restarting the world. Blocklist changes apply immediately.
 
 ## Installation (players)
 

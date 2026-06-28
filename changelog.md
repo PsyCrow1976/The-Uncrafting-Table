@@ -2,6 +2,16 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.17 — Config defaults and input blocklist
+
+### Added
+
+- `general.blockedInputItems` — list of item IDs that cannot be placed in the input slot (default: `minecraft:oak_sapling`)
+
+### Changed
+
+- `general.craftable` now defaults to `false` (9-oak-plank crafting recipe disabled until enabled in config)
+
 ## 0.0.0.16 — All items enabled
 
 ### Changed
