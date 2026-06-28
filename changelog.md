@@ -4,6 +4,12 @@ Public release notes for **The Uncrafting Table**. Step-by-step development hist
 
 ---
 
+## 0.0.1.2 — Single-ingredient uncraft filter
+
+### Fixed
+
+- Only crafting recipes that use a single item in one slot can be reversed — e.g. planks uncraft back to a log, but coal block (9 coal) and similar multi-item crafts are no longer listed
+
 ## 0.0.1.1 — Meaningful uncraft filter
 
 ### Fixed

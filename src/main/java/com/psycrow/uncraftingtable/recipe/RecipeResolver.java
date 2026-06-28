@@ -81,6 +81,13 @@ public final class RecipeResolver {
                                 source);
                         continue;
                     }
+                    if (!isSingleIngredientCraft(resolved)) {
+                        UncraftingDebug.log(
+                                "resolve: skipped recipe={} via={} reason=craft requires multiple ingredients",
+                                holder.id().identifier(),
+                                source);
+                        continue;
+                    }
                     results.add(resolved);
                     UncraftingDebug.log(
                             "resolve: matched recipe={} via={} outputCount={}",
@@ -243,6 +250,26 @@ public final class RecipeResolver {
         }
 
         return false;
+    }
+
+    /**
+     * Only reverse crafts that used a single item in one slot (e.g. 1 log -> 4 planks).
+     * Multi-item crafts such as 9 coal -> 1 coal block are excluded.
+     */
+    private static boolean isSingleIngredientCraft(ResolvedRecipe resolved) {
+        int occupiedSlots = 0;
+        int totalCount = 0;
+
+        for (ItemStack stack : resolved.previewGrid()) {
+            if (stack == null || stack.isEmpty()) {
+                continue;
+            }
+
+            occupiedSlots++;
+            totalCount += stack.getCount();
+        }
+
+        return occupiedSlots == 1 && totalCount == 1;
     }
 
     private static ItemStack[] previewFromShapedDisplay(ShapedCraftingRecipeDisplay display, ContextMap context) {
