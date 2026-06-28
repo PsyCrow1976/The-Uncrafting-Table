@@ -19,7 +19,7 @@ The Uncrafting Table reverses vanilla crafting recipes into their original ingre
 |---------|-----------|
 | Input | Single slot — accepts one item at a time |
 | Preview | 3x3 grid shows the crafting layout for the matched recipe |
-| Arrow | Decorative arrow between input and preview (vanilla crafting table GUI) |
+| Arrow | Decorative outward-arrow motif in the custom `uncrafting_table.png` GUI texture (layout coordinates unchanged) |
 | Multiple recipes | `>` cycle button appears when more than one crafting recipe produces the input item |
 | Uncraft | Click any preview slot — input item is consumed and all ingredients are placed in the player inventory |
 | Inventory full | Uncraft is blocked if the player cannot fit all ingredients (no partial consumption) |

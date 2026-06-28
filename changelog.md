@@ -2,6 +2,20 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.22 — Custom block & GUI visuals
+
+### Added
+
+- Custom block textures (raised 3×3 grid top with hollow center and outward arrows, wrapped side grid, inverted front motif)
+- Subtle cyan/purple accent colors on grid lines and arrow details
+- CurseForge branding assets (`branding/curseforge_logo_400x400.png`, `curseforge_logo_256x256.png`, `curseforge_screenshot_template.png`)
+- `scripts/generate_visual_assets.py` — reproducible asset generator (requires `pip install Pillow`; run `python3 scripts/generate_visual_assets.py`)
+
+### Changed
+
+- Block and item models now reference mod textures instead of vanilla crafting table
+- GUI reskinned with oak wood tones and uncrafting accent colors (slot layout unchanged)
+
 ## 0.0.0.21 — Config layout
 
 ### Changed
