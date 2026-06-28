@@ -1,0 +1,10 @@
+{
+  "sources": [
+    {
+      "type": "neoforge:namespaced_directory",
+      "namespace": "uncraftingtable",
+      "source": "gui",
+      "prefix": ""
+    }
+  ]
+}

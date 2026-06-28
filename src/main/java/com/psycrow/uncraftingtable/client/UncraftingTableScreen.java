@@ -1,5 +1,6 @@
 package com.psycrow.uncraftingtable.client;
 
+import com.psycrow.uncraftingtable.UncraftingTableMod;
 import com.psycrow.uncraftingtable.menu.UncraftingTableMenu;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -9,12 +10,11 @@ import net.minecraft.resources.Identifier;
 import net.minecraft.world.entity.player.Inventory;
 
 public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTableMenu> {
-    private static final Identifier HOPPER_TEXTURE =
-            Identifier.withDefaultNamespace("textures/gui/container/hopper.png");
-
+    private static final Identifier TEXTURE =
+            Identifier.fromNamespaceAndPath(UncraftingTableMod.MOD_ID, "textures/gui/uncrafting_table.png");
     public UncraftingTableScreen(UncraftingTableMenu menu, Inventory playerInventory, Component title) {
-        super(menu, playerInventory, title, 176, 133);
-        this.inventoryLabelY = this.imageHeight - 94;
+        super(menu, playerInventory, title, 176, 166);
+        this.titleLabelX = 29;
     }
 
     @Override
@@ -22,7 +22,7 @@ public class UncraftingTableScreen extends AbstractContainerScreen<UncraftingTab
         super.extractBackground(graphics, mouseX, mouseY, partialTick);
         graphics.blit(
                 RenderPipelines.GUI_TEXTURED,
-                HOPPER_TEXTURE,
+                TEXTURE,
                 this.leftPos,
                 this.topPos,
                 0,

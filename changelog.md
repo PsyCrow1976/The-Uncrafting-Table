@@ -2,6 +2,38 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.8 — Close GUI returns input
+
+### Fixed
+
+- Input item is returned to the player inventory when the GUI is closed (dropped at the player's feet if inventory is full)
+- Block entity is cleared on close so the table can be reopened normally
+- Client menu now uses the block entity's synced `ContainerData` instead of a local dummy copy
+
+## 0.0.0.7 — Uncrafting
+
+### Added
+
+- Recipe lookup when an item is placed in the input slot
+- 3x3 preview grid shows crafting ingredients for the matched recipe
+- Click any preview slot to uncraft — input is consumed and all ingredients go to the player inventory
+- Uncraft is blocked if the player inventory cannot fit all output items
+
+## 0.0.0.6 — Visual 3x3 preview grid
+
+### Added
+
+- Custom Iron-Furnaces-style GUI texture with slot backgrounds baked in (`uncrafting_table.png`)
+- Empty 3x3 display grid on the right side of the GUI (visual only, no interaction)
+- GUI atlas registration for mod-owned textures
+
+### Changed
+
+- GUI rebuilt using Iron Furnaces pattern: mod-owned texture with slot backgrounds baked in, menu slots aligned to texture coordinates
+- GUI no longer reuses vanilla `crafting_table.png` (which misaligned the left-side grid)
+- Slot art composited from vanilla crafting table texture for correct inset appearance; arrow baked into texture (MC 26.1 has no crafting-table arrow sprite)
+- Input slot on the left at `(30, 35)`; player inventory at `(8, 84)`
+
 ## 0.0.0.5 — Simple single-slot GUI
 
 ### Changed

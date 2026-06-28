@@ -1,11 +1,15 @@
 package com.psycrow.uncraftingtable.menu;
 
 import com.psycrow.uncraftingtable.blockentity.UncraftingTableBlockEntity;
+import com.psycrow.uncraftingtable.network.UncraftHandler;
 import com.psycrow.uncraftingtable.registry.ModMenus;
 import net.minecraft.network.RegistryFriendlyByteBuf;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
+import net.minecraft.world.inventory.ContainerData;
+import net.minecraft.world.inventory.ContainerInput;
 import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
@@ -13,22 +17,36 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 
 public class UncraftingTableMenu extends AbstractContainerMenu {
     public static final int INPUT_SLOT_INDEX = 0;
-    public static final int PLAYER_INVENTORY_START = 1;
+    public static final int PREVIEW_SLOT_START = 1;
+    public static final int PLAYER_INVENTORY_START = 10;
 
-    private static final int INPUT_SLOT_X = 80;
-    private static final int INPUT_SLOT_Y = 20;
+    private static final int INPUT_SLOT_X = 30;
+    private static final int INPUT_SLOT_Y = 35;
+    private static final int PREVIEW_GRID_X = 88;
+    private static final int PREVIEW_GRID_Y = 17;
 
     private final UncraftingTableBlockEntity blockEntity;
     private final ContainerLevelAccess access;
+    private final ContainerData data;
 
     public UncraftingTableMenu(int containerId, Inventory playerInventory, RegistryFriendlyByteBuf buffer) {
-        this(containerId, playerInventory, getBlockEntity(playerInventory, buffer));
+        UncraftingTableBlockEntity blockEntity = getBlockEntity(playerInventory, buffer);
+        this(containerId, playerInventory, blockEntity, blockEntity.getContainerData());
     }
 
     public UncraftingTableMenu(int containerId, Inventory playerInventory, UncraftingTableBlockEntity blockEntity) {
+        this(containerId, playerInventory, blockEntity, blockEntity.getContainerData());
+    }
+
+    public UncraftingTableMenu(
+            int containerId,
+            Inventory playerInventory,
+            UncraftingTableBlockEntity blockEntity,
+            ContainerData data) {
         super(ModMenus.UNCRAFTING_TABLE.get(), containerId);
         this.blockEntity = blockEntity;
         this.access = ContainerLevelAccess.create(blockEntity.getLevel(), blockEntity.getBlockPos());
+        this.data = data;
 
         addSlot(new Slot(blockEntity, UncraftingTableBlockEntity.INPUT_SLOT, INPUT_SLOT_X, INPUT_SLOT_Y) {
             @Override
@@ -37,7 +55,20 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
             }
         });
 
-        addStandardInventorySlots(playerInventory, 8, 51);
+        for (int row = 0; row < 3; row++) {
+            for (int column = 0; column < 3; column++) {
+                int slot = UncraftingTableBlockEntity.PREVIEW_START + row * 3 + column;
+                addSlot(new PreviewSlot(
+                        blockEntity,
+                        slot,
+                        PREVIEW_GRID_X + column * 18,
+                        PREVIEW_GRID_Y + row * 18));
+            }
+        }
+
+        addStandardInventorySlots(playerInventory, 8, 84);
+        addDataSlots(data);
+        blockEntity.refreshRecipes();
     }
 
     private static UncraftingTableBlockEntity getBlockEntity(Inventory playerInventory, RegistryFriendlyByteBuf buffer) {
@@ -50,6 +81,34 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
 
     public UncraftingTableBlockEntity getBlockEntity() {
         return blockEntity;
+    }
+
+    public int getRecipeCount() {
+        return data.get(0);
+    }
+
+    public int getSelectedRecipeIndex() {
+        return data.get(1);
+    }
+
+    public boolean hasValidRecipe() {
+        return data.get(2) == 1;
+    }
+
+    @Override
+    public void clicked(int slotIndex, int buttonNum, ContainerInput containerInput, Player player) {
+        if (slotIndex >= PREVIEW_SLOT_START
+                && slotIndex < PLAYER_INVENTORY_START
+                && containerInput == ContainerInput.PICKUP
+                && buttonNum == 0
+                && hasValidRecipe()) {
+            if (player instanceof ServerPlayer serverPlayer) {
+                UncraftHandler.tryUncraft(serverPlayer, this);
+            }
+            return;
+        }
+
+        super.clicked(slotIndex, buttonNum, containerInput, player);
     }
 
     @Override
@@ -65,7 +124,11 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
                 if (!moveItemStackTo(stackInSlot, PLAYER_INVENTORY_START, slots.size(), true)) {
                     return ItemStack.EMPTY;
                 }
-            } else if (!moveItemStackTo(stackInSlot, INPUT_SLOT_INDEX, INPUT_SLOT_INDEX + 1, false)) {
+            } else if (slotIndex >= PLAYER_INVENTORY_START) {
+                if (!moveItemStackTo(stackInSlot, INPUT_SLOT_INDEX, INPUT_SLOT_INDEX + 1, false)) {
+                    return ItemStack.EMPTY;
+                }
+            } else if (slotIndex >= PREVIEW_SLOT_START) {
                 return ItemStack.EMPTY;
             }
 
@@ -77,6 +140,27 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
         }
 
         return moved;
+    }
+
+    @Override
+    public void removed(Player player) {
+        super.removed(player);
+        if (!(player instanceof ServerPlayer serverPlayer)) {
+            return;
+        }
+
+        access.execute((level, pos) -> {
+            ItemStack input = blockEntity.getItem(UncraftingTableBlockEntity.INPUT_SLOT);
+            if (input.isEmpty()) {
+                return;
+            }
+
+            ItemStack returned = input.copy();
+            blockEntity.setItem(UncraftingTableBlockEntity.INPUT_SLOT, ItemStack.EMPTY);
+            if (!serverPlayer.getInventory().add(returned)) {
+                serverPlayer.drop(returned, false);
+            }
+        });
     }
 
     @Override
