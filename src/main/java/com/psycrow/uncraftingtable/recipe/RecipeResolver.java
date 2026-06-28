@@ -15,6 +15,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.item.crafting.PlacementInfo;
 import net.minecraft.world.item.crafting.RecipeHolder;
 import net.minecraft.world.item.crafting.RecipeManager;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.item.crafting.ShapedRecipe;
 
 public final class RecipeResolver {
@@ -26,11 +27,8 @@ public final class RecipeResolver {
         }
 
         List<ResolvedRecipe> results = new ArrayList<>();
-        for (RecipeHolder<?> holder : recipeManager.getRecipes()) {
-            if (!(holder.value() instanceof CraftingRecipe craftingRecipe)) {
-                continue;
-            }
-
+        for (RecipeHolder<CraftingRecipe> holder : recipeManager.recipeMap().byType(RecipeType.CRAFTING)) {
+            CraftingRecipe craftingRecipe = holder.value();
             ItemStack result = craftingRecipe.assemble(CraftingInput.EMPTY);
             if (result.isEmpty() || !ItemStack.isSameItem(result, input)) {
                 continue;
@@ -42,9 +40,7 @@ public final class RecipeResolver {
                 continue;
             }
 
-            @SuppressWarnings("unchecked")
-            RecipeHolder<CraftingRecipe> craftingHolder = (RecipeHolder<CraftingRecipe>) holder;
-            results.add(new ResolvedRecipe(craftingHolder, previewGrid, outputs));
+            results.add(new ResolvedRecipe(holder, previewGrid, outputs));
         }
 
         return results;

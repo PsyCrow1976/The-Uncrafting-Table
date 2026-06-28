@@ -20,4 +20,9 @@ public class PreviewSlot extends Slot {
     public boolean mayPickup(Player player) {
         return false;
     }
+
+    @Override
+    public boolean isHighlightable() {
+        return hasItem();
+    }
 }

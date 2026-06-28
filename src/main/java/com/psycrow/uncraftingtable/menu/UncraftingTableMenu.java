@@ -101,7 +101,7 @@ public class UncraftingTableMenu extends AbstractContainerMenu {
                 && slotIndex < PLAYER_INVENTORY_START
                 && containerInput == ContainerInput.PICKUP
                 && buttonNum == 0
-                && hasValidRecipe()) {
+                && blockEntity.hasSelectedRecipe()) {
             if (player instanceof ServerPlayer serverPlayer) {
                 UncraftHandler.tryUncraft(serverPlayer, this);
             }

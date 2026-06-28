@@ -2,6 +2,15 @@
 
 All notable changes to The Uncrafting Table are documented here.
 
+## 0.0.0.9 — Recipe preview sync
+
+### Fixed
+
+- Preview grid now fills with recipe ingredients when an item is placed in the input slot
+- Preview grid clears when the input item is removed
+- Clicking any preview slot uncrafts correctly (ingredients to inventory, input consumed)
+- Recipe lookup uses the crafting recipe map; open menus are synced immediately after preview updates
+
 ## 0.0.0.8 — Close GUI returns input
 
 ### Fixed
