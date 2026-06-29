@@ -20,17 +20,14 @@ public final class ModConfig {
             .comment("Shaped crafting pattern rows (1-3 rows, 1-3 characters each). Use spaces for empty cells.")
             .defineList(
                     "general.customCraftingPattern",
-                    List.of("POP", "ODO", "POP"),
+                    List.of("CCC", "CDC", "CCC"),
                     ModConfig::isValidPatternRow);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> CUSTOM_CRAFTING_KEYS = BUILDER
             .comment("Pattern key to ingredient mappings (e.g. P=minecraft:oak_planks). Item IDs or #tags.")
             .defineList(
                     "general.customCraftingKeys",
-                    List.of(
-                            "P=minecraft:oak_planks",
-                            "O=minecraft:obsidian",
-                            "D=minecraft:diamond"),
+                    List.of("C=minecraft:crafting_table", "D=minecraft:diamond"),
                     ModConfig::isValidCraftingKeyEntry);
 
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLOCKED_INPUT_ITEMS = BUILDER

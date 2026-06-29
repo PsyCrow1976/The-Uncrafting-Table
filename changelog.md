@@ -28,7 +28,7 @@ Turn crafted items back into their original ingredients with a dedicated Uncraft
 
 ### Features
 
-- **Uncrafting Table block** — placeable block in the Functional Blocks creative tab; craftable via a configurable shaped recipe (default: oak planks, obsidian, and diamond)
+- **Uncrafting Table block** — placeable block in the Functional Blocks creative tab; craftable via a configurable shaped recipe (default: diamond center with 8 crafting tables)
 - **Single-item input** — insert one item on the left; the mod looks up a matching crafting-table recipe
 - **Live 3×3 preview** — ingredients appear in the preview grid on the right, laid out like the original recipe
 - **One-click uncraft** — click any preview slot to consume the input and receive all ingredients in your inventory
@@ -45,8 +45,8 @@ Edit `config/uncraftingtable-common.toml` after first launch:
 |--------|---------|-------------|
 | `general.craftable` | `true` | Enable the crafting recipe for the Uncrafting Table |
 | `general.useCustomCraftingRecipe` | `true` | Build the table recipe from config instead of the datapack default |
-| `general.customCraftingPattern` | `POP` / `ODO` / `POP` | Shaped pattern for the table recipe |
-| `general.customCraftingKeys` | planks, obsidian, diamond | Ingredient mapping for pattern letters |
+| `general.customCraftingPattern` | `CCC` / `CDC` / `CCC` | Shaped pattern for the table recipe |
+| `general.customCraftingKeys` | crafting table, diamond | Ingredient mapping for pattern letters |
 | `general.blockedInputItems` | `[]` | Item IDs that cannot be placed in the input slot |
 | `general.blockDamagedToolsAndWeapons` | `true` | Block tools and weapons that have lost any durability |
 | `[Debugging] debug` | `true` | Log recipe lookup and preview sync to `latest.log` |

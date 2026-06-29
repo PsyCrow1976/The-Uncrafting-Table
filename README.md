@@ -52,7 +52,7 @@ See [requirements.md](requirements.md) for full details, core functionality, and
 
 ## How it works
 
-1. **Craft** an Uncrafting Table using the configured recipe (default: oak planks, obsidian, and diamond), or find it in the Functional Blocks creative tab.
+1. **Craft** an Uncrafting Table using the configured recipe (default: diamond center with 8 crafting tables), or find it in the Functional Blocks creative tab.
 2. **Place** the block and right-click to open the GUI.
 3. **Insert** a single item into the input slot on the left.
 4. **Preview** the matched crafting recipe — ingredients appear in the 3×3 grid on the right, with a decorative outward-arrow motif between input and preview.
@@ -88,8 +88,8 @@ After first launch, edit `config/uncraftingtable-common.toml`:
 [general]
 craftable = true
 useCustomCraftingRecipe = true
-customCraftingPattern = ["POP", "ODO", "POP"]
-customCraftingKeys = ["P=minecraft:oak_planks", "O=minecraft:obsidian", "D=minecraft:diamond"]
+customCraftingPattern = ["CCC", "CDC", "CCC"]
+customCraftingKeys = ["C=minecraft:crafting_table", "D=minecraft:diamond"]
 blockedInputItems = []
 blockDamagedToolsAndWeapons = true
 

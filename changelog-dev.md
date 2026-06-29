@@ -1,6 +1,12 @@
 # Development Changelog
 
-Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
+Detailed version history from internal `0.0.0.x` development builds and patch releases (`0.0.1.x`, `0.0.2.x`, `0.0.3.x`). For public `0.0.x` release notes, see [changelog.md](changelog.md).
+
+## 0.0.3.1 — Default crafting recipe
+
+### Changed
+
+- Default Uncrafting Table recipe is now a diamond in the center surrounded by 8 crafting tables (`CCC` / `CDC` / `CCC`)
 
 ## 0.0.2.6 — Cycle button fine-tuning
 

@@ -18,7 +18,7 @@ Custom block textures and GUI use a **reversed crafting-table** look: raised gri
 
 ## How it works
 
-1. Craft or find an **Uncrafting Table** (default recipe: oak planks, obsidian, and diamond — configurable).
+1. Craft or find an **Uncrafting Table** (default recipe: diamond center with 8 crafting tables — configurable).
 2. Place the block and open the GUI.
 3. Insert **one item** into the input slot on the left.
 4. View the matched recipe ingredients in the **3×3 preview** on the right.
@@ -57,8 +57,8 @@ Edit `config/uncraftingtable-common.toml` after first launch.
 |--------|---------|-------------|
 | `general.craftable` | `true` | Enable the crafting recipe for the table |
 | `general.useCustomCraftingRecipe` | `true` | Build recipe from config |
-| `general.customCraftingPattern` | `POP / ODO / POP` | Shaped pattern |
-| `general.customCraftingKeys` | planks, obsidian, diamond | Pattern ingredients |
+| `general.customCraftingPattern` | `CCC / CDC / CCC` | Shaped pattern |
+| `general.customCraftingKeys` | crafting table, diamond | Pattern ingredients |
 | `general.blockedInputItems` | `[]` | Items blocked from input |
 | `general.blockDamagedToolsAndWeapons` | `true` | Block damaged tools/weapons |
 

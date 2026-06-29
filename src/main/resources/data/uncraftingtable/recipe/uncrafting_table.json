@@ -2,13 +2,12 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "POP",
-    "ODO",
-    "POP"
+    "CCC",
+    "CDC",
+    "CCC"
   ],
   "key": {
-    "P": "minecraft:oak_planks",
-    "O": "minecraft:obsidian",
+    "C": "minecraft:crafting_table",
     "D": "minecraft:diamond"
   },
   "result": {
