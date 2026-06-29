@@ -67,6 +67,7 @@ When a **new version** needs to be uploaded to CurseForge, request a fresh **API
    - Endpoint: `POST https://minecraft.curseforge.com/api/projects/1590819/upload-file`
    - Auth header: `X-Api-Token: <token>`
    - Form fields: `metadata` (JSON) + `file` (the JAR)
+   - **Display name:** set `displayName` to `The Uncrafting Table <version>` (e.g. `The Uncrafting Table 0.0.4`) — do not leave the default JAR filename as the file title
    - **File changelog:** use the full cumulative public history from [`branding/curseforge_changelog.md`](branding/curseforge_changelog.md) (CurseForge only shows the latest file’s changelog — do not upload just the new version’s notes)
 5. Keep `branding/curseforge_changelog.md` in sync with [`changelog.md`](changelog.md) whenever a public `0.0.x` release ships
 6. Update the live project description with `POST .../update-project` if listing copy changed
