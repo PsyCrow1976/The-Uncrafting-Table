@@ -1,3 +1,11 @@
+## 0.0.4 — Crafting recipe update
+
+**Minecraft 26.1.2** · **NeoForge 26.1.2.76**
+
+### Changed
+
+- Default Uncrafting Table recipe is now a diamond in the center surrounded by 8 crafting tables
+
 ## 0.0.3 — Recipe cycling
 
 **Minecraft 26.1.2** · **NeoForge 26.1.2.76**
